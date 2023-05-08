@@ -28,8 +28,7 @@ TextWrapAutoSize(text);
 
 ### Use As Method
 
-The static method `solution` allows for accessing the resulting font size directly. 
-Using the result, one can construct a font size adjusted widget manually.
+The static method `solution` allows for accessing the resulting font size directly, which resides in the `TextStyle`. Using the result, one can construct a font size adjusted widget manually.
 
 ```dart
 Solution sol = TextWrapAutoSize.solution(Size size, Text text);
