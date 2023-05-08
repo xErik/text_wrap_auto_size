@@ -35,21 +35,26 @@ Using the result, one can construct a font size adjusted widget manually.
 Solution sol = TextWrapAutoSize.solution(Size size, Text text);
 
 // String text for easy reference.
-print(sol.text);   
+
+print(sol.text); // String 
 
 // TextStyle with adjusted font size.  
 // All other style properties of the Text-parameter 
-/// are merged into it.
-print(sol.style); 
+// are merged into it.
 
-// Resulting size of the wrapped and auto sized text.
+print(sol.style); // TextStyle 
+
+// Resulting Size of the wrapped and auto sized text.
 // Smaller or equal to the Size-parameter of the outer box.
-print(sol.sizeInner);
+
+print(sol.sizeInner); // Size
 
 // The Size-parameter of the outer box for easy reference.
-print(sol.sizeOuter);
 
-/// How to output the font adjusted text yourself.
+print(sol.sizeOuter); // Size
+
+// How to output the font adjusted text yourself.
+
 SizedBox(
     width: sol.sizeOuter.width,
     height: sol.sizeOuter.height,
@@ -69,7 +74,7 @@ SizedBox(
 );
 ```
 
-In some case, width and height can be determined by wrapping the widget in `Expanded`.
+In some cases, width and height can be determined by wrapping the widget in `Expanded`.
 
 ```dart
 Expanded(
