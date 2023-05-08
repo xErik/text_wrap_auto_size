@@ -2,41 +2,32 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:text_wrap_auto_size/solution.dart';
 
 import 'measurementview.dart';
-import 'solution.dart';
 
 class OverflowHelper {
-  final Text text;
-  double? _fontSize;
-  TextStyle? _style;
   final List<int> _candidatesFormer = [];
-  int _candidateStep = 100;
+  int _candidateStep = 200;
 
-  OverflowHelper(this.text);
-
-  void initStyle(BuildContext context) {
-    _fontSize = text.style?.fontSize ??
-        Theme.of(context).textTheme.bodyMedium!.fontSize!;
-
-    _style = text.style != null
-        ? text.style!.merge(TextStyle(fontSize: _fontSize))
-        : TextStyle(fontSize: _fontSize);
+  Text wrap(Text text, Size size) {
+    final sol = solution(text, size);
+    return Text(sol.text, style: sol.style);
   }
 
-  Text wrap(BuildContext ctx, Size cts) {
-    if (_style == null) {
-      initStyle(ctx);
-    }
+  Solution solution(Text text, Size size) {
+    final double fontSize = text.style?.fontSize ?? 14.0;
 
-    _resetCandidates();
+    final TextStyle style = text.style != null
+        ? text.style!.merge(TextStyle(fontSize: fontSize))
+        : TextStyle(fontSize: fontSize);
 
     Solution? solIsSmaller;
-    Solution sol = _dimensions(_style!, cts.width);
+    Solution sol = _dimensions(text, style, size);
 
     while (true) {
-      bool isSmaller = sol.isSmaller(cts) ? true : false;
-      bool isLarger = sol.isLarger(cts) ? true : false;
+      bool isSmaller = sol.isSmaller;
+      bool isLarger = sol.isLarger;
 
       if (isSmaller) {
         solIsSmaller = sol;
@@ -57,9 +48,9 @@ class OverflowHelper {
         // print('CANDIDATE IS NULL, BREAK');
         break;
       } else {
-        TextStyle style =
-            _style!.merge(TextStyle(fontSize: candidate.toDouble()));
-        sol = _dimensions(style, cts.width);
+        final styleMerged =
+            style.merge(TextStyle(fontSize: candidate.toDouble()));
+        sol = _dimensions(text, styleMerged, size);
       }
     }
 
@@ -68,17 +59,10 @@ class OverflowHelper {
 
     // Should never happen
     if (solIsSmaller == null) {
-      throw 'Do not have a smaller Solution than $sol which is to large.';
+      throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
-    return Text(text.data!,
-        style: solIsSmaller.style
-            .merge(TextStyle(backgroundColor: Colors.green.withAlpha(20))));
-  }
-
-  void _resetCandidates() {
-    _candidatesFormer.clear();
-    _candidateStep = 200;
+    return solIsSmaller;
   }
 
   int? _candidate(bool doUp) {
@@ -104,18 +88,18 @@ class OverflowHelper {
     return candidate;
   }
 
-  Solution _dimensions(TextStyle style, double wrapAt) {
+  Solution _dimensions(Text text, TextStyle style, Size sizeOuter) {
     final w = SizedBox(
-        width: wrapAt,
+        width: sizeOuter.width,
         child: Directionality(
             textDirection: text.textDirection ?? TextDirection.ltr,
             child: Text(text.data!, style: style)));
-    final s = measureWidget(w);
+    final sizeInner = _measureWidget(w);
 
-    return Solution(text.data!, style, s);
+    return Solution(text.data!, style, sizeInner, sizeOuter);
   }
 
-  Size measureWidget(Widget widget) {
+  Size _measureWidget(Widget widget) {
     final PipelineOwner pipelineOwner = PipelineOwner();
     final MeasurementView rootView = pipelineOwner.rootNode = MeasurementView();
     final BuildOwner buildOwner = BuildOwner(focusManager: FocusManager());
