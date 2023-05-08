@@ -12,7 +12,7 @@ class OverflowHelper {
 
   Text wrap(Text text, Size size) {
     final sol = solution(text, size);
-    return Text(sol.text, style: sol.style);
+    return _cloneWith(text, sol.style, isIgnoreMaxLines: false);
   }
 
   Solution solution(Text text, Size size) {
@@ -93,7 +93,8 @@ class OverflowHelper {
         width: sizeOuter.width,
         child: Directionality(
             textDirection: text.textDirection ?? TextDirection.ltr,
-            child: Text(text.data!, style: style)));
+            child: _cloneWith(text, style, isIgnoreMaxLines: true)));
+
     final sizeInner = _measureWidget(w);
 
     return Solution(text.data!, style, sizeInner, sizeOuter);
@@ -114,10 +115,23 @@ class OverflowHelper {
       pipelineOwner.flushLayout();
       return rootView.size;
     } finally {
-      // Clean up.
       element
           .update(RenderObjectToWidgetAdapter<RenderBox>(container: rootView));
       buildOwner.finalizeTree();
     }
+  }
+
+  _cloneWith(Text text, TextStyle style, {bool isIgnoreMaxLines = false}) {
+    return Text(text.data!,
+        textAlign: text.textAlign,
+        locale: text.locale,
+        softWrap: text.softWrap,
+        textScaleFactor: text.textScaleFactor,
+        // maxLines: isIgnoreMaxLines ? null : text.maxLines,
+        semanticsLabel: text.semanticsLabel,
+        strutStyle: text.strutStyle,
+        textWidthBasis: text.textWidthBasis,
+        textDirection: text.textDirection,
+        style: style);
   }
 }

@@ -13,4 +13,8 @@
 ## 1.0.2
 
 - README update.
-- Internal optimization.
+- Optimization.
+
+## 1.0.3
+
+- Respecting additional Text attributes
