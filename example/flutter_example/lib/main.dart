@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_wrap_auto_size/main.dart';
+import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,11 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const style = TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
+    final text = Text(_text, style: style);
+
     return SafeArea(
         child: Scaffold(
-      body: TextWrapAutoSize(Text(_text,
-          style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.red))),
+      body: TextWrapAutoSize(text),
       //
       // Add or clear text
       //

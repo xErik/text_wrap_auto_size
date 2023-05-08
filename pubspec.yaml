@@ -1,5 +1,7 @@
 name: text_wrap_auto_size
-description: Wraps texts and auto sizes it dynamically with respect to the given space. 
+description: Wraps text and auto sizes it dynamically with respect to the given space. 
+issues: https://github.com/xErik/text_wrap_auto_size/issues
+repository: https://github.com/xErik/text_wrap_auto_size
 
 version: 1.0.0+1
 

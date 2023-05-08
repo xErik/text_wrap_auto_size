@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_wrap_auto_size/main.dart';
+import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
 
 void main() {
   runApp(const MyApp());
