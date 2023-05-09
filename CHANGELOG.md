@@ -18,3 +18,17 @@
 ## 1.0.3
 
 - Respecting additional Text attributes
+
+## 1.0.3+1
+
+- README update.
+
+## 1.0.4
+
+- Removed Text.softWrap
+- README update.
+
+## 1.0.5
+
+- Added corrected Text.softWrap
+- README update.

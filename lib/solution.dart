@@ -18,13 +18,19 @@ class Solution {
   Solution(this.text, this.style, this.sizeInner, this.sizeOuter);
 
   /// Whether the inner box of the text is smaller than the outer box.
-  bool get isSmaller => sizeInner.height < sizeOuter.height ? true : false;
+  bool get isValidSame =>
+      sizeInner.width == sizeOuter.width &&
+      sizeInner.height == sizeOuter.height;
+
+  /// Whether the inner box of the text is smaller than the outer box.
+  bool get isValid =>
+      sizeInner.width <= sizeOuter.width &&
+      sizeInner.height <= sizeOuter.height;
 
   /// Whether the inner box of the text is larger than the outer box.
-  bool get isLarger => (sizeInner.width > sizeOuter.width) ||
-          (sizeInner.height > sizeOuter.height)
-      ? true
-      : false;
+  // bool get isInvalid =>
+  //     (sizeInner.width > sizeOuter.width) ||
+  //     (sizeInner.height > sizeOuter.height);
 
   @override
   String toString() {

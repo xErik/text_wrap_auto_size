@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as m;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,37 +13,37 @@ class OverflowHelper {
 
   Text wrap(Text text, Size size) {
     final sol = solution(text, size);
-    return _cloneWith(text, sol.style, isIgnoreMaxLines: false);
+    return _cloneWith(text, sol.style);
   }
 
-  Solution solution(Text text, Size size) {
+  Solution solution(Text text, Size sizeOuter) {
     final double fontSize = text.style?.fontSize ?? 14.0;
 
     final TextStyle style = text.style != null
         ? text.style!.merge(TextStyle(fontSize: fontSize))
         : TextStyle(fontSize: fontSize);
 
-    Solution? solIsSmaller;
-    Solution sol = _dimensions(text, style, size);
+    Solution? solIsValid;
+    Solution sol = _dimensions(text, style, sizeOuter);
 
     while (true) {
-      bool isSmaller = sol.isSmaller;
-      bool isLarger = sol.isLarger;
+      bool isValid = sol.isValid;
+      bool isValidSame = sol.isValidSame;
+      // bool isLarger = sol.isInvalid;
 
-      if (isSmaller) {
-        solIsSmaller = sol;
+      if (isValid) {
+        solIsValid = sol;
+
+        if (isValidSame) {
+          // print('EDGE CASE, BREAK');
+          break;
+        }
       }
 
       // print(
       //     "SOL: ${sol.size} ${sol.style.fontSize} CTS: $cts isSmaller: $isSmaller isLarger: $isLarger");
 
-      // Edge case
-      if (isSmaller == false && isLarger == false) {
-        // print('EDGE CASE, BREAK');
-        break;
-      }
-
-      int? candidate = _candidate(isSmaller);
+      int? candidate = _candidate(isValid);
 
       if (candidate == null) {
         // print('CANDIDATE IS NULL, BREAK');
@@ -50,19 +51,18 @@ class OverflowHelper {
       } else {
         final styleMerged =
             style.merge(TextStyle(fontSize: candidate.toDouble()));
-        sol = _dimensions(text, styleMerged, size);
+        sol = _dimensions(text, styleMerged, sizeOuter);
       }
     }
 
-    // print(
-    //     'Calculate font size ${solIsSmaller!.style.fontSize} for size $cts in ${_candidatesFormer.length} steps');
-
     // Should never happen
-    if (solIsSmaller == null) {
+    if (solIsValid == null) {
       throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
-    return solIsSmaller;
+    log('Font size ${solIsValid.style.fontSize} with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${_candidatesFormer.length} steps');
+
+    return solIsValid;
   }
 
   int? _candidate(bool doUp) {
@@ -82,18 +82,24 @@ class OverflowHelper {
       candidate = null;
     } else {
       _candidatesFormer.add(candidate);
-      _candidateStep = max(1, _candidateStep ~/ 2);
+      _candidateStep = m.max(1, _candidateStep ~/ 2);
     }
 
     return candidate;
   }
 
   Solution _dimensions(Text text, TextStyle style, Size sizeOuter) {
+    // bool isSoftWrap = (text.softWrap != null && text.softWrap! == false) ||
+    //     (text.maxLines == null);
+
+    bool isSoftWrap = (text.softWrap != null && text.softWrap! == false);
+
     final w = SizedBox(
-        width: sizeOuter.width,
+        width: isSoftWrap ? null : sizeOuter.width,
+        // width: sizeOuter.width,
         child: Directionality(
             textDirection: text.textDirection ?? TextDirection.ltr,
-            child: _cloneWith(text, style, isIgnoreMaxLines: true)));
+            child: _cloneWith(text, style)));
 
     final sizeInner = _measureWidget(w);
 
@@ -121,13 +127,13 @@ class OverflowHelper {
     }
   }
 
-  _cloneWith(Text text, TextStyle style, {bool isIgnoreMaxLines = false}) {
+  _cloneWith(Text text, TextStyle style) {
     return Text(text.data!,
         textAlign: text.textAlign,
         locale: text.locale,
         softWrap: text.softWrap,
         textScaleFactor: text.textScaleFactor,
-        // maxLines: isIgnoreMaxLines ? null : text.maxLines,
+        // maxLines: text.maxLines,
         semanticsLabel: text.semanticsLabel,
         strutStyle: text.strutStyle,
         textWidthBasis: text.textWidthBasis,

@@ -14,14 +14,26 @@ The widget **requires** a given width and height. It will throw an Exception, if
 
 ## Usage
 
-Generally, the `TextStyle` is respected.
+Generally, several Text attributes are respected.
 
 ```dart
 final style = TextStyle(
     fontWeight: FontWeight.bold, 
     color: Colors.red);
 
-final text = Text('text', style: style);
+final text = Text(
+    'text',
+    style: style,
+    textAlign: TextAlign.center,
+    locale: Locale('de'),
+    textScaleFactor: 1.0,
+    semanticsLabel: 'semanticsLabel',
+    strutStyle: StrutStyle(),
+    textWidthBasis: TextWidthBasis.parent,
+    textDirection: TextDirection.ltr,
+    softWrap: true, // set to false for text on one line
+    // maxLines: 2 <--- IGNORED !
+);
 
 TextWrapAutoSize(text);
 ```
@@ -63,27 +75,26 @@ SizedBox(
 
 ### Use As Widget
 
-Define width and height.
+
 
 ```dart
+// Define width and height.
+
 SizedBox(
     width:250,
     height:250,
     child: TextWrapAutoSize(Text('text'))
 );
-```
 
-In some cases, width and height can be determined by wrapping the widget in `Expanded`.
+// In some cases, width and height can be determined 
+// by wrapping the widget in `Expanded`.
 
-```dart
 Expanded(
     child: TextWrapAutoSize(Text('text'))
 );
-```
 
-Use it as the `Scaffold`'s body:
+// Use it as the `Scaffold`'s body.
 
-```dart
 @override
 Widget build(BuildContext context) {
     return SafeArea(
