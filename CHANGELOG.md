@@ -32,3 +32,7 @@
 
 - Added corrected Text.softWrap
 - README update.
+
+## 1.0.5+1
+
+- Added live example.

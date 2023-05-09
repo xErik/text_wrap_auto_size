@@ -14,6 +14,9 @@ class Solution {
   /// The size of the outer box.
   Size sizeOuter;
 
+  /// How many font size tests it took to find this solution.
+  int fontSizeTests = -1;
+
   /// Constructor.
   Solution(this.text, this.style, this.sizeInner, this.sizeOuter);
 

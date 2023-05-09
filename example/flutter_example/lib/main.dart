@@ -30,7 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(fontFamily: 'Aclonica', fontSize: 100);
+    const style =
+        TextStyle(fontFamily: 'Aclonica', fontWeight: FontWeight.bold);
 
     return SafeArea(
         child: Scaffold(

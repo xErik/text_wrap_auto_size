@@ -6,6 +6,8 @@ The text is never cut off. Insteads, it will apply the largest font size possibl
 
 Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
 
+Find a live example [here](https://xerik.github.io/text_wrap_auto_size/).
+
 ![](screen-capture.gif)
 
 ## Requirements 
@@ -14,12 +16,14 @@ The widget **requires** a given width and height. It will throw an Exception, if
 
 ## Usage
 
-Generally, several Text attributes are respected.
+Generally, several Text attributes are respected, `style` probably being the most important one.
 
 ```dart
 final style = TextStyle(
     fontWeight: FontWeight.bold, 
-    color: Colors.red);
+    color: Colors.red,
+    fontFamiliy: 'Courier',
+);
 
 final text = Text(
     'text',

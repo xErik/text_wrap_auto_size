@@ -12,31 +12,36 @@ class OverflowHelper {
   final List<int> _candidatesFormer = [];
   int _candidateStep = 200;
 
+  /// Returns a Text widget with the adjusted font size some debug output.
   Stack wrapDebug(Text text, Size size) {
     final sol = solution(text, size);
     final txt = _cloneWithStyle(text, sol.style);
     final label =
-        "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}";
+        "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
 
     return Stack(
       children: [
+        Container(color: Colors.red, child: txt),
         Positioned(
             right: 0,
             bottom: 0,
             child: Text(label,
+                textAlign: TextAlign.end,
                 style: TextStyle(
-                  backgroundColor: Colors.white.withAlpha(128),
+                  backgroundColor: Colors.white.withAlpha(220),
                 ))),
-        Positioned(child: txt)
       ],
     );
   }
 
+  /// Returns a Text widget with the adjusted font size.
   Text wrap(Text text, Size size) {
     final sol = solution(text, size);
     return _cloneWithStyle(text, sol.style);
   }
 
+  /// Returns solution object with the calculated results.
+  /// The adjusted font size is in `style.fontSize`.
   Solution solution(Text text, Size sizeOuter) {
     final double fontSize = text.style?.fontSize ?? 14.0;
 
@@ -81,9 +86,12 @@ class OverflowHelper {
       throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
+    solIsValid.fontSizeTests = _candidatesFormer.length;
+
     if (kDebugMode) {
-      log('Font ${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${_candidatesFormer.length} steps');
+      log('Font ${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${solIsValid.fontSizeTests} steps');
     }
+
     return solIsValid;
   }
 
