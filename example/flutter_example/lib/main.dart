@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 250,
             color: Colors.grey,
             child: TextWrapAutoSize(Text(controller.text, style: style),
-                isShowDebug: true),
+                doShowDebug: true),
           ),
         ],
       ),
