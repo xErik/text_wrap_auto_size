@@ -8,8 +8,9 @@ import 'src/overflowhelper.dart';
 /// Throws, if unrestricted (infinite) bounds are given.
 class TextWrapAutoSize extends StatelessWidget {
   final Text text;
+  final bool isShowDebug;
 
-  const TextWrapAutoSize(this.text, {super.key});
+  const TextWrapAutoSize(this.text, {super.key, this.isShowDebug = false});
 
   /// This method returns the calculated font size with respect to the given size.
   ///
@@ -26,7 +27,7 @@ class TextWrapAutoSize extends StatelessWidget {
         throw 'BoxContraints have infinite height: $size.\n\nTry wrapping TextAutoSize with Expanded: Expanded(child:TextAutoSize("text")).\n\nTry wrapping TextAutoSize with SizedBox: SizedBox(width:250, height:250, child:TextAutoSize("text"))).\n\n';
       }
       // Is this efficient compared to class field?
-      return OverflowHelper().wrap(text, size);
+      return OverflowHelper().wrapDebug(text, size);
     });
   }
 }

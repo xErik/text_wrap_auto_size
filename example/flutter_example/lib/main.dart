@@ -25,35 +25,72 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _text = 'text';
+  // String text = 'abcd';
+  final controller = TextEditingController(text: 'test');
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
-    final text = Text(_text, style: style, softWrap: true);
+    const style = TextStyle(fontFamily: 'Aclonica', fontSize: 100);
 
     return SafeArea(
         child: Scaffold(
-      body: TextWrapAutoSize(text),
-      //
-      // Add or clear text
-      //
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      body: Column(
         children: [
-          FloatingActionButton(
-            onPressed: () => setState(() => _text = ''),
-            child: const Icon(Icons.clear),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            onPressed: () => setState(() {
-              _text = ('$_text text').trim();
-            }),
-            child: const Icon(Icons.add),
+          TextField(
+              controller: controller,
+              decoration: const InputDecoration(hintText: 'Enter some text '),
+              autofocus: true,
+              onChanged: (val) {
+                setState(() {
+                  controller.text = val;
+                  controller.selection = TextSelection.fromPosition(
+                      TextPosition(offset: controller.text.length));
+                });
+              }),
+          const SizedBox(height: 16),
+          Container(
+            width: 250,
+            height: 250,
+            color: Colors.grey,
+            child: TextWrapAutoSize(Text(controller.text, style: style),
+                isShowDebug: true),
           ),
         ],
       ),
     ));
   }
+
+  // Size _measureWidget(Widget widget) {
+  //   final PipelineOwner pipelineOwner = PipelineOwner();
+  //   final MeasurementView rootView = pipelineOwner.rootNode = MeasurementView();
+  //   final BuildOwner buildOwner = BuildOwner(focusManager: FocusManager());
+  //   final RenderObjectToWidgetElement<RenderBox> element =
+  //       RenderObjectToWidgetAdapter<RenderBox>(
+  //     container: rootView,
+  //     debugShortDescription: '[root]',
+  //     child: widget,
+  //   ).attachToRenderTree(buildOwner);
+  //   try {
+  //     rootView.scheduleInitialLayout();
+  //     pipelineOwner.flushLayout();
+  //     return rootView.size;
+  //   } finally {
+  //     element
+  //         .update(RenderObjectToWidgetAdapter<RenderBox>(container: rootView));
+  //     buildOwner.finalizeTree();
+  //   }
+  // }
 }
+
+// class MeasurementView extends RenderBox
+//     with RenderObjectWithChildMixin<RenderBox> {
+//   @override
+//   void performLayout() {
+//     assert(child != null);
+//     child!.layout(const BoxConstraints(), parentUsesSize: true);
+//     size = child!.size;
+//   }
+
+//   @override
+//   void debugAssertDoesMeetConstraints() => true;
+// }

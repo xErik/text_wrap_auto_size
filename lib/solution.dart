@@ -27,11 +27,6 @@ class Solution {
       sizeInner.width <= sizeOuter.width &&
       sizeInner.height <= sizeOuter.height;
 
-  /// Whether the inner box of the text is larger than the outer box.
-  // bool get isInvalid =>
-  //     (sizeInner.width > sizeOuter.width) ||
-  //     (sizeInner.height > sizeOuter.height);
-
   @override
   String toString() {
     return '$sizeOuter $sizeInner $style';

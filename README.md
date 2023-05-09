@@ -99,7 +99,7 @@ Expanded(
 Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-        body: TextWrapAutoSize(Text('text')),
+            body: TextWrapAutoSize(Text('text')),
         ),
     );
 }

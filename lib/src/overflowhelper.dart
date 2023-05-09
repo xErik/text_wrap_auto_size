@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math' as m;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:text_wrap_auto_size/solution.dart';
@@ -11,9 +12,29 @@ class OverflowHelper {
   final List<int> _candidatesFormer = [];
   int _candidateStep = 200;
 
+  Stack wrapDebug(Text text, Size size) {
+    final sol = solution(text, size);
+    final txt = _cloneWithStyle(text, sol.style);
+    final label =
+        "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}";
+
+    return Stack(
+      children: [
+        Positioned(
+            right: 0,
+            bottom: 0,
+            child: Text(label,
+                style: TextStyle(
+                  backgroundColor: Colors.white.withAlpha(128),
+                ))),
+        Positioned(child: txt)
+      ],
+    );
+  }
+
   Text wrap(Text text, Size size) {
     final sol = solution(text, size);
-    return _cloneWith(text, sol.style);
+    return _cloneWithStyle(text, sol.style);
   }
 
   Solution solution(Text text, Size sizeOuter) {
@@ -60,8 +81,9 @@ class OverflowHelper {
       throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
-    log('Font size ${solIsValid.style.fontSize} with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${_candidatesFormer.length} steps');
-
+    if (kDebugMode) {
+      log('Font ${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${_candidatesFormer.length} steps');
+    }
     return solIsValid;
   }
 
@@ -89,17 +111,15 @@ class OverflowHelper {
   }
 
   Solution _dimensions(Text text, TextStyle style, Size sizeOuter) {
-    // bool isSoftWrap = (text.softWrap != null && text.softWrap! == false) ||
-    //     (text.maxLines == null);
-
     bool isSoftWrap = (text.softWrap != null && text.softWrap! == false);
+    // bool isMaxLines = text.maxLines != null;
 
     final w = SizedBox(
         width: isSoftWrap ? null : sizeOuter.width,
         // width: sizeOuter.width,
         child: Directionality(
             textDirection: text.textDirection ?? TextDirection.ltr,
-            child: _cloneWith(text, style)));
+            child: _cloneWithStyle(text, style)));
 
     final sizeInner = _measureWidget(w);
 
@@ -127,7 +147,7 @@ class OverflowHelper {
     }
   }
 
-  _cloneWith(Text text, TextStyle style) {
+  Text _cloneWithStyle(Text text, TextStyle style) {
     return Text(text.data!,
         textAlign: text.textAlign,
         locale: text.locale,
