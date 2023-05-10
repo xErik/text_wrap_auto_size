@@ -44,3 +44,7 @@
 ## 1.0.7
 
 - Prevent word-wrapping of long text.
+
+## 1.0.7+1
+
+- Improved demo.

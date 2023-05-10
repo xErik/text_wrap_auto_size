@@ -25,10 +25,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // String text = 'abcd';
+  String text = '';
   final controller = TextEditingController(
       text:
           'Unde est odit dolorum in fuga voluptatem. Consequatur odit nobis nihil labore. A aliquam at officia error.');
+
+  @override
+  void initState() {
+    super.initState();
+
+    text = controller.text;
+
+    controller.addListener(() {
+      setState(() {
+        text = controller.text;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           TextField(
-              controller: controller,
-              decoration: const InputDecoration(hintText: 'Enter some text'),
-              autofocus: true,
-              onChanged: (val) {
-                setState(() {
-                  controller.text = val;
-                  controller.selection = TextSelection.fromPosition(
-                      TextPosition(offset: controller.text.length));
-                });
-              }),
+            controller: controller,
+            decoration: const InputDecoration(hintText: 'Enter some text'),
+            autofocus: true,
+          ),
           Container(
             width: 250,
             height: 250,
             color: Colors.grey,
-            child: TextWrapAutoSize(Text(controller.text, style: style),
-                doShowDebug: true),
+            child:
+                TextWrapAutoSize(Text(text, style: style), doShowDebug: true),
           ),
         ],
       ),
