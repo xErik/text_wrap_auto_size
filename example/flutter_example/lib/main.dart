@@ -50,44 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextPosition(offset: controller.text.length));
                 });
               }),
-          Row(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: 250,
-                    height: 250,
-                    color: Colors.grey,
-                    child: Text(controller.text,
-                        style:
-                            style.copyWith(fontSize: 30, fontFamily: 'Roboto')),
-                  ),
-                  const Text('Font: Roboto / fix: 30'),
-                ],
-              ),
-              Column(children: [
-                Container(
-                  width: 250,
-                  height: 250,
-                  color: Colors.grey,
-                  child: Text(controller.text,
-                      style: style.copyWith(fontSize: 30)),
-                ),
-                const Text('Font: Aclonica / fix: 30'),
-              ]),
-              Column(
-                children: [
-                  Container(
-                    width: 250,
-                    height: 250,
-                    color: Colors.grey,
-                    child: TextWrapAutoSize(Text(controller.text, style: style),
-                        doShowDebug: true),
-                  ),
-                  const Text('Font: Aclonica / computed: 30'),
-                ],
-              )
-            ],
+          Container(
+            width: 250,
+            height: 250,
+            color: Colors.grey,
+            child: TextWrapAutoSize(Text(controller.text, style: style),
+                doShowDebug: true),
           ),
         ],
       ),

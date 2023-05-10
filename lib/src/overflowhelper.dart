@@ -1,31 +1,26 @@
-import 'dart:developer';
+import 'dart:developer' as d;
 import 'dart:math' as m;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:text_wrap_auto_size/solution.dart';
-import 'package:text_wrap_auto_size/src/measurementview.dart';
+
+import 'challenge.dart';
 
 class OverflowHelper {
   final List<int> _candidatesFormer = [];
-  int _candidateStep = 200;
+  int _candidateStep = 150;
 
-  /// Returns a Text widget with the adjusted font size some debug output.
+  /// Returns a Stack widget with the adjusted font size some debug output.
   Stack wrapDebug(Text text, Size size) {
     final sol = solution(text, size);
-    final txt = _cloneWithStyle(text, sol.style);
+    final txt = sol.text;
     final label =
         "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
 
     return Stack(
-      // fit: StackFit.expand,
       children: [
         Positioned(
-          // top: 0,
-          // left: 0,
-          // width: 250,
-          // height: 250,
-          // child: txt,
           child: Container(color: Colors.red, child: txt),
         ),
         Positioned(
@@ -42,32 +37,25 @@ class OverflowHelper {
 
   /// Returns a Text widget with the adjusted font size.
   Text wrap(Text text, Size size) {
-    final sol = solution(text, size);
-    return _cloneWithStyle(text, sol.style);
+    return solution(text, size).text;
   }
 
   /// Returns solution object with the calculated results.
   /// The adjusted font size is in `style.fontSize`.
   Solution solution(Text text, Size sizeOuter) {
-    final double fontSize = text.style?.fontSize ?? 14.0;
-
-    final TextStyle style = text.style != null
-        ? text.style!.merge(TextStyle(fontSize: fontSize))
-        : TextStyle(fontSize: fontSize);
+    final task = Challenge(text, sizeOuter);
 
     Solution? solIsValid;
-    Solution sol = _dimensions(text, style, sizeOuter);
+    Solution sol = _dimensions(task);
 
     while (true) {
       bool isValid = sol.isValid;
       bool isValidSame = sol.isValidSame;
-      // bool isLarger = sol.isInvalid;
 
       if (isValid) {
         solIsValid = sol;
 
         if (isValidSame) {
-          // print('EDGE CASE, BREAK');
           break;
         }
       }
@@ -78,12 +66,10 @@ class OverflowHelper {
       int? candidate = _candidate(isValid);
 
       if (candidate == null) {
-        // print('CANDIDATE IS NULL, BREAK');
         break;
       } else {
-        final styleMerged =
-            style.merge(TextStyle(fontSize: candidate.toDouble()));
-        sol = _dimensions(text, styleMerged, sizeOuter);
+        final taskNew = task.cloneWithFontSize(candidate.toDouble());
+        sol = _dimensions(taskNew);
       }
     }
 
@@ -95,23 +81,23 @@ class OverflowHelper {
     solIsValid.fontSizeTests = _candidatesFormer.length;
 
     if (kDebugMode) {
-      log('Font ${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${solIsValid.fontSizeTests} steps');
+      d.log(
+          'Font ${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt with inner size ${solIsValid.sizeInner} for outer size ${solIsValid.sizeOuter} in ${solIsValid.fontSizeTests} steps');
     }
 
     return solIsValid;
   }
 
+  /// Returns the next font size candidate.
+  /// Returns NULL if nor more candidates are available.
   int? _candidate(bool doUp) {
     int? candidate;
 
     if (_candidatesFormer.isEmpty) {
       candidate = _candidateStep;
-      // print("candidate: $candidate");
     } else {
       int direction = doUp ? 1 : -1;
       candidate = _candidatesFormer.last + (_candidateStep * direction);
-      // print(
-      //     "candidate: $candidate dir: $direction former: ${_candidatesFormer.length}");
     }
 
     if (_candidatesFormer.contains(candidate)) {
@@ -124,32 +110,69 @@ class OverflowHelper {
     return candidate;
   }
 
-  /// Measures the dimension of the `text`.
-  /// if `softWrap = false`, text will be placed on one line.
-  Solution _dimensions(Text text, TextStyle style, Size sizeOuter) {
-    // bool isSoftWrap = (text.softWrap != null && text.softWrap! == false);
-    // final w = SizedBox(
-    //     width: isSoftWrap ? null : sizeOuter.width,
-    //     child: Directionality(
-    //         textDirection: text.textDirection ?? TextDirection.ltr,
-    //         child: _cloneWithStyle(text, style)));
-    // final sizeInner = MeasurementView.measure(w);
-    // return Solution(text.data!, style, sizeInner, sizeOuter);
-    final sizeInner = text.textHeight(sizeOuter.width, style);
-    return Solution(text.data!, style, sizeInner, sizeOuter);
+  Solution _dimensions(Challenge task) {
+    //
+    // Test for single word exceeding with
+    //
+    final maxWordWidth = _maxWordWidth(task);
+    if (maxWordWidth > task.sizeOuter.width) {
+      return Solution(task.text, task.style,
+          Size(maxWordWidth, task.sizeOuter.height), task.sizeOuter);
+    }
+
+    //
+    // Test whole text
+    //
+    final TextPainter painter = TextPainter(
+      text: TextSpan(text: task.text.data, style: task.style),
+      textDirection: task.text.textDirection ?? TextDirection.ltr,
+      maxLines: task.text.maxLines,
+      textScaleFactor: task.text.textScaleFactor ?? 1.0,
+      locale: task.text.locale,
+      textAlign: task.text.textAlign ?? TextAlign.start,
+      textHeightBehavior: task.text.textHeightBehavior,
+      textWidthBasis: task.text.textWidthBasis ?? TextWidthBasis.parent,
+    )..layout(minWidth: 0, maxWidth: task.sizeOuter.width);
+    return Solution(task.text, task.style, painter.size, task.sizeOuter);
   }
 
-  Text _cloneWithStyle(Text text, TextStyle style) {
-    return Text(text.data!,
-        textAlign: text.textAlign,
-        locale: text.locale,
-        softWrap: text.softWrap,
-        textScaleFactor: text.textScaleFactor,
-        // maxLines: text.maxLines,
-        semanticsLabel: text.semanticsLabel,
-        strutStyle: text.strutStyle,
-        textWidthBasis: text.textWidthBasis,
-        textDirection: text.textDirection,
-        style: style);
+  /// Returns the width of the longest word with no line breaking.
+  ///
+  /// This is a heuristic approach for speed reasons.
+  ///
+  /// It sorts the words by letter-length, checks the word-width descendingly.
+  /// It will only check words with 2 letters less than the longest word.
+  final reWhitespace = RegExp('\\s+');
+  double _maxWordWidth(Challenge task) {
+    double? maxWidth;
+
+    final words =
+        task.text.data!.split(reWhitespace).toSet().toList(growable: false);
+
+    words.sort((a, b) => b.length.compareTo(a.length));
+
+    final maxChars = words.first.length;
+
+    final TextPainter painter = TextPainter(
+      textDirection: task.text.textDirection ?? TextDirection.ltr,
+      maxLines: 1, // test ONLY one line here
+      textScaleFactor: task.text.textScaleFactor ?? 1.0,
+      locale: task.text.locale,
+      textAlign: task.text.textAlign ?? TextAlign.start,
+      textHeightBehavior: task.text.textHeightBehavior,
+      textWidthBasis: task.text.textWidthBasis ?? TextWidthBasis.parent,
+    );
+
+    for (final word in words) {
+      // Given a 10 letter word,a 8 letter word is processed, but not an 7 letter word.
+      if (word.length + 3 < maxChars) {
+        return maxWidth!;
+      }
+
+      painter.text = TextSpan(text: word, style: task.style);
+      painter.layout(minWidth: 0, maxWidth: double.infinity);
+      maxWidth = painter.width;
+    }
+    return maxWidth!;
   }
 }

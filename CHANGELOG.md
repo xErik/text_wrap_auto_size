@@ -40,3 +40,7 @@
 ## 1.0.6
 
 - Added debug mode.
+
+## 1.0.7
+
+- Prevent word-wrapping of long text.

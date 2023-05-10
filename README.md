@@ -6,9 +6,7 @@ The text is never cut off. Insteads, it will apply the largest font size possibl
 
 Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
 
-Find a live example [here](https://xerik.github.io/text_wrap_auto_size/).
-
-![](screen-capture.gif)
+Find a live demo [here](https://xerik.github.io/text_wrap_auto_size/).
 
 ## Requirements 
 
@@ -79,8 +77,6 @@ SizedBox(
 
 ### Use As Widget
 
-
-
 ```dart
 // Define width and height.
 
@@ -109,20 +105,33 @@ Widget build(BuildContext context) {
 }
 ```
 
+Render debug info.
+
+```dart 
+TextWrapAutoSize(
+    Text('text'), 
+    doShowDebug: true
+)
+```
+
 ## Alternatives
 
 The package [auto_size_text](https://pub.dev/packages/auto_size_text) does something similar.
 
 The package [magic_text](https://pub.dev/packages/magic_text) does something similar.
 
-## Issues and Background
-
-The package follows the most simple apporach I could think of. There might be a more efficient approach.
+## Background 
 
 Internally, the widget performs a binary-search for the optimal font size and renders the text multiple times in its own render-tree.
 
 In my typical use cases, the widgets needs nine steps to find the optimal font size.
 
-The code measuring the widget size can be found in the [Flutter docs](https://api.flutter.dev/flutter/widgets/BuildOwner-class.html).
+### TODO 
+
+* Hyphenation?
+* Clipping the text?
+* Setting min and max sizes (depends on clipping)?
+
+## Issues
 
 Open an issue on [Github](https://github.com/xErik/text_wrap_auto_size/issues).
