@@ -49,7 +49,7 @@ Solution sol = TextWrapAutoSize.solution(Size size, Text text);
 
 // String text for easy reference.
 
-print(sol.text); // String 
+print(sol.textString); // String 
 
 // TextStyle with adjusted font size.  
 // All other style properties of the Text-parameter 
@@ -71,7 +71,7 @@ print(sol.sizeOuter); // Size
 SizedBox(
     width: sol.sizeOuter.width,
     height: sol.sizeOuter.height,
-    child: Text(sol.text, style: sol.style),
+    child: Text(sol.textString, style: sol.style),
 );
 ```
 

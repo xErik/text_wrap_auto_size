@@ -21,6 +21,15 @@ class TextWrapAutoSize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return FutureBuilder(
+    //     future: HyphenHelper.init(DefaultResourceLoaderLanguage.enUs),
+    //     builder: (ctx, snap) {
+    //       if (snap.connectionState == ConnectionState.waiting) {
+    //         return const SizedBox.shrink();
+    //       }
+
+    //       Hyphenator hyphen = snap.data!;
+
     return LayoutBuilder(builder: (BuildContext ctx, BoxConstraints cts) {
       Size size = Size(cts.maxWidth, cts.maxHeight);
       if (size.width == double.infinity || size.height == double.infinity) {
@@ -32,5 +41,6 @@ class TextWrapAutoSize extends StatelessWidget {
         return OverflowHelper().wrap(text, size);
       }
     });
+    // });
   }
 }

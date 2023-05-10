@@ -48,3 +48,7 @@
 ## 1.0.7+1
 
 - Improved demo.
+
+## 1.0.8
+
+- README.

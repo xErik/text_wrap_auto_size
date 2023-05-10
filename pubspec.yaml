@@ -3,14 +3,18 @@ description: Wraps text and auto sizes it dynamically with respect to the given 
 issues: https://github.com/xErik/text_wrap_auto_size/issues
 repository: https://github.com/xErik/text_wrap_auto_size
 
-version: 1.0.7+1
+version: 1.0.8
+
+# publish_to: none
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+  # hyphenatorx: 
+  #   path: ../hyphenatorx/  
 
 dev_dependencies:
   flutter_test:

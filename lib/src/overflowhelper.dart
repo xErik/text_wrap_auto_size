@@ -3,6 +3,7 @@ import 'dart:math' as m;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// import 'package:hyphenatorx/hyphenatorx.dart';
 import 'package:text_wrap_auto_size/solution.dart';
 
 import 'challenge.dart';
