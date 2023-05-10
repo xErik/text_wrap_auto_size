@@ -111,7 +111,9 @@ Widget build(BuildContext context) {
 
 ## Alternatives
 
-The package [auto_size_text](https://pub.dev/packages/auto_size_text) does something similar and offers more options (at the moment).
+The package [auto_size_text](https://pub.dev/packages/auto_size_text) does something similar.
+
+The package [magic_text](https://pub.dev/packages/magic_text) does something similar.
 
 ## Issues and Background
 

@@ -3,10 +3,8 @@ import 'dart:math' as m;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:text_wrap_auto_size/solution.dart';
-
-import 'measurementview.dart';
+import 'package:text_wrap_auto_size/src/measurementview.dart';
 
 class OverflowHelper {
   final List<int> _candidatesFormer = [];
@@ -20,8 +18,16 @@ class OverflowHelper {
         "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
 
     return Stack(
+      // fit: StackFit.expand,
       children: [
-        Container(color: Colors.red, child: txt),
+        Positioned(
+          // top: 0,
+          // left: 0,
+          // width: 250,
+          // height: 250,
+          // child: txt,
+          child: Container(color: Colors.red, child: txt),
+        ),
         Positioned(
             right: 0,
             bottom: 0,
@@ -118,41 +124,19 @@ class OverflowHelper {
     return candidate;
   }
 
+  /// Measures the dimension of the `text`.
+  /// if `softWrap = false`, text will be placed on one line.
   Solution _dimensions(Text text, TextStyle style, Size sizeOuter) {
-    bool isSoftWrap = (text.softWrap != null && text.softWrap! == false);
-    // bool isMaxLines = text.maxLines != null;
-
-    final w = SizedBox(
-        width: isSoftWrap ? null : sizeOuter.width,
-        // width: sizeOuter.width,
-        child: Directionality(
-            textDirection: text.textDirection ?? TextDirection.ltr,
-            child: _cloneWithStyle(text, style)));
-
-    final sizeInner = _measureWidget(w);
-
+    // bool isSoftWrap = (text.softWrap != null && text.softWrap! == false);
+    // final w = SizedBox(
+    //     width: isSoftWrap ? null : sizeOuter.width,
+    //     child: Directionality(
+    //         textDirection: text.textDirection ?? TextDirection.ltr,
+    //         child: _cloneWithStyle(text, style)));
+    // final sizeInner = MeasurementView.measure(w);
+    // return Solution(text.data!, style, sizeInner, sizeOuter);
+    final sizeInner = text.textHeight(sizeOuter.width, style);
     return Solution(text.data!, style, sizeInner, sizeOuter);
-  }
-
-  Size _measureWidget(Widget widget) {
-    final PipelineOwner pipelineOwner = PipelineOwner();
-    final MeasurementView rootView = pipelineOwner.rootNode = MeasurementView();
-    final BuildOwner buildOwner = BuildOwner(focusManager: FocusManager());
-    final RenderObjectToWidgetElement<RenderBox> element =
-        RenderObjectToWidgetAdapter<RenderBox>(
-      container: rootView,
-      debugShortDescription: '[root]',
-      child: widget,
-    ).attachToRenderTree(buildOwner);
-    try {
-      rootView.scheduleInitialLayout();
-      pipelineOwner.flushLayout();
-      return rootView.size;
-    } finally {
-      element
-          .update(RenderObjectToWidgetAdapter<RenderBox>(container: rootView));
-      buildOwner.finalizeTree();
-    }
   }
 
   Text _cloneWithStyle(Text text, TextStyle style) {

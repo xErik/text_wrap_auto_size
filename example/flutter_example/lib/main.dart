@@ -26,7 +26,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // String text = 'abcd';
-  final controller = TextEditingController(text: 'test');
+  final controller = TextEditingController(
+      text:
+          'Unde est odit dolorum in fuga voluptatem. Consequatur odit nobis nihil labore. A aliquam at officia error.');
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           TextField(
               controller: controller,
-              decoration: const InputDecoration(hintText: 'Enter some text '),
+              decoration: const InputDecoration(hintText: 'Enter some text'),
               autofocus: true,
               onChanged: (val) {
                 setState(() {
@@ -48,50 +50,47 @@ class _MyHomePageState extends State<MyHomePage> {
                       TextPosition(offset: controller.text.length));
                 });
               }),
-          const SizedBox(height: 16),
-          Container(
-            width: 250,
-            height: 250,
-            color: Colors.grey,
-            child: TextWrapAutoSize(Text(controller.text, style: style),
-                doShowDebug: true),
+          Row(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    width: 250,
+                    height: 250,
+                    color: Colors.grey,
+                    child: Text(controller.text,
+                        style:
+                            style.copyWith(fontSize: 30, fontFamily: 'Roboto')),
+                  ),
+                  const Text('Font: Roboto / fix: 30'),
+                ],
+              ),
+              Column(children: [
+                Container(
+                  width: 250,
+                  height: 250,
+                  color: Colors.grey,
+                  child: Text(controller.text,
+                      style: style.copyWith(fontSize: 30)),
+                ),
+                const Text('Font: Aclonica / fix: 30'),
+              ]),
+              Column(
+                children: [
+                  Container(
+                    width: 250,
+                    height: 250,
+                    color: Colors.grey,
+                    child: TextWrapAutoSize(Text(controller.text, style: style),
+                        doShowDebug: true),
+                  ),
+                  const Text('Font: Aclonica / computed: 30'),
+                ],
+              )
+            ],
           ),
         ],
       ),
     ));
   }
-
-  // Size _measureWidget(Widget widget) {
-  //   final PipelineOwner pipelineOwner = PipelineOwner();
-  //   final MeasurementView rootView = pipelineOwner.rootNode = MeasurementView();
-  //   final BuildOwner buildOwner = BuildOwner(focusManager: FocusManager());
-  //   final RenderObjectToWidgetElement<RenderBox> element =
-  //       RenderObjectToWidgetAdapter<RenderBox>(
-  //     container: rootView,
-  //     debugShortDescription: '[root]',
-  //     child: widget,
-  //   ).attachToRenderTree(buildOwner);
-  //   try {
-  //     rootView.scheduleInitialLayout();
-  //     pipelineOwner.flushLayout();
-  //     return rootView.size;
-  //   } finally {
-  //     element
-  //         .update(RenderObjectToWidgetAdapter<RenderBox>(container: rootView));
-  //     buildOwner.finalizeTree();
-  //   }
-  // }
 }
-
-// class MeasurementView extends RenderBox
-//     with RenderObjectWithChildMixin<RenderBox> {
-//   @override
-//   void performLayout() {
-//     assert(child != null);
-//     child!.layout(const BoxConstraints(), parentUsesSize: true);
-//     size = child!.size;
-//   }
-
-//   @override
-//   void debugAssertDoesMeetConstraints() => true;
-// }
