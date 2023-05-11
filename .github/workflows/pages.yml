@@ -36,7 +36,7 @@ jobs:
 
 
       - name: Flutter action
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
       - name: Upgrades flutter
         run: flutter upgrade
         working-directory: ./example/flutter_example/
