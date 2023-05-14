@@ -8,13 +8,16 @@ version: 1.0.8
 # publish_to: none
 
 environment:
-  sdk: '>=2.19.6 <4.0.0'
+  # sdk: '>=2.19.6 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  # hyphenatorx: 
-  #   path: ../hyphenatorx/  
+  
+  hyphenatorx: 
+    path: ../hyphenatorx
+  # hyphenatorx: ^1.4.0
 
 dev_dependencies:
   flutter_test:

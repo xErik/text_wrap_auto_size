@@ -1,0 +1,129 @@
+import 'dart:developer' as d;
+import 'dart:math' as m;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:hyphenatorx/texttokens.dart';
+// import 'package:hyphenatorx/hyphenatorx.dart';
+import 'package:text_wrap_auto_size/solution.dart';
+import 'package:text_wrap_auto_size/src/strategy.dart';
+import 'package:text_wrap_auto_size/src/strategyhyphenate.dart';
+import 'package:text_wrap_auto_size/src/strategynonhyphenate.dart';
+
+import 'challenge.dart';
+
+class Manager {
+  final List<int> _candidatesFormer = [];
+  int _candidateStep = 150;
+  late final Strategy strategy;
+
+  // ------------------------------------------------------------------------------
+  // WRAP TEXT
+  // ------------------------------------------------------------------------------
+
+  /// Returns a Stack widget with the adjusted font size some debug output.
+  Stack wrapDebug(Text text, Size size, TextTokens? tokens) {
+    final sol = solution(text, size, tokens);
+    final txt = sol.text;
+    final label =
+        "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
+
+    return Stack(
+      children: [
+        Positioned(child: Container(color: Colors.red, child: txt)),
+        Positioned(
+            right: 0,
+            bottom: 0,
+            child: Text(label,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  backgroundColor: Colors.white.withAlpha(220),
+                ))),
+      ],
+    );
+  }
+
+  /// Returns a Text widget with the adjusted font size.
+  Text wrap(Text text, Size size, TextTokens? tokens) {
+    return solution(text, size, tokens).text;
+  }
+
+  // ------------------------------------------------------------------------------
+  // SOLUTION
+  // ------------------------------------------------------------------------------
+
+  /// Returns solution object with the calculated results.
+  /// The adjusted font size is stored in `style.fontSize`.
+  Solution solution(Text text, Size sizeOuter, TextTokens? tokens) {
+    final task = Challenge(text, sizeOuter, tokens: tokens);
+    strategy = tokens != null ? StrategyHyphenate() : StrategyNonHyphenate();
+
+    Solution? solIsValid;
+    Solution sol = strategy.dimensions(task);
+
+    while (true) {
+      bool isValid = sol.isValid;
+      bool isValidSame = sol.isValidSame;
+
+      if (isValid) {
+        solIsValid = sol;
+
+        if (isValidSame) {
+          break;
+        }
+      }
+
+      // print(
+      //     "SOL: ${sol.size} ${sol.style.fontSize} CTS: $cts isSmaller: $isSmaller isLarger: $isLarger");
+
+      int? candidate = _candidate(isValid);
+
+      if (candidate == null) {
+        break;
+      } else {
+        final taskNew = task.cloneWithFontSize(candidate.toDouble());
+        sol = strategy.dimensions(taskNew);
+      }
+    }
+
+    // Should never happen
+    if (solIsValid == null) {
+      throw 'Do not have a smaller Solution than $sol which is too large.';
+    }
+
+    solIsValid.fontSizeTests = _candidatesFormer.length;
+
+    if (kDebugMode) {
+      d.log(
+          'font:${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt | inner:${solIsValid.sizeInner.width}/${solIsValid.sizeInner.height} | outer:${solIsValid.sizeOuter.width}/${solIsValid.sizeOuter.height} | steps:${solIsValid.fontSizeTests} | ${strategy.runtimeType.toString()}');
+    }
+
+    return solIsValid;
+  }
+
+  // ------------------------------------------------------------------------------
+  // FONT CANDIDATE
+  // ------------------------------------------------------------------------------
+
+  /// Returns the next font size candidate.
+  /// Returns NULL if nor more candidates are available.
+  int? _candidate(bool doUp) {
+    int? candidate;
+
+    if (_candidatesFormer.isEmpty) {
+      candidate = _candidateStep;
+    } else {
+      int direction = doUp ? 1 : -1;
+      candidate = _candidatesFormer.last + (_candidateStep * direction);
+    }
+
+    if (_candidatesFormer.contains(candidate)) {
+      candidate = null;
+    } else {
+      _candidatesFormer.add(candidate);
+      _candidateStep = m.max(1, _candidateStep ~/ 2);
+    }
+
+    return candidate;
+  }
+}

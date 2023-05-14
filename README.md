@@ -38,6 +38,10 @@ final text = Text(
 );
 
 TextWrapAutoSize(text);
+
+// Or with automatic hyphenation:
+
+TextWrapAutoSizeHyphend(text);
 ```
 
 ### Use As Method
@@ -46,6 +50,10 @@ The static method `solution` allows for accessing the resulting font size direct
 
 ```dart
 Solution sol = TextWrapAutoSize.solution(Size size, Text text);
+
+// Or with automatic hyphenation:
+
+TextWrapAutoSizeHyphend.solution(Size size, Text text, 'en_us');
 
 // String text for easy reference.
 

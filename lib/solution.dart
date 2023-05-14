@@ -20,6 +20,7 @@ class Solution {
   /// Constructor.
   Solution(this._text, this.style, this.sizeInner, this.sizeOuter);
 
+  /// Returns the text with the applied `TextStyle`.
   Text get text => Text(_text.data!,
       textAlign: _text.textAlign,
       locale: _text.locale,

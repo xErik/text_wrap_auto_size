@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
+import 'package:text_wrap_auto_size/text_wrap_auto_size_hyphend.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,61 +11,90 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      title: 'Demo With Hyphenation',
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      home: MainPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   String text = '';
+  String symbol = '\u{00AD}';
   final controller = TextEditingController(
       text:
-          'Unde est odit dolorum in fuga voluptatem. Consequatur odit nobis nihil labore. A aliquam at officia error.');
+          'The arts are a vast subdivision of culture, composed of many creative endeavors and disciplines.');
 
   @override
   void initState() {
     super.initState();
-
     text = controller.text;
-
-    controller.addListener(() {
-      setState(() {
-        text = controller.text;
-      });
-    });
+    controller.addListener(() => setState(() => text = controller.text));
   }
 
   @override
   Widget build(BuildContext context) {
-    const style =
-        TextStyle(fontFamily: 'Aclonica', fontWeight: FontWeight.bold);
-
     return SafeArea(
         child: Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+          child: Column(
         children: [
-          TextField(
-            controller: controller,
-            decoration: const InputDecoration(hintText: 'Enter some text'),
-            autofocus: true,
-          ),
+          _textfield(),
+          const SizedBox(height: 16),
+          _symbolMenu(),
+          const SizedBox(height: 16),
           Container(
             width: 250,
             height: 250,
             color: Colors.grey,
             child:
-                TextWrapAutoSize(Text(text, style: style), doShowDebug: true),
+                // ValueKey(symbol) causes call of
+                // initState() in TextWrapAutoSizeHyphend, which is needed to
+                // re-initialize its FutureBuilder.
+                TextWrapAutoSizeHyphend(
+              Text(text),
+              'en_us',
+              symbol: symbol,
+              doShowDebug: true,
+              key: ValueKey(symbol),
+            ),
           ),
         ],
-      ),
+      )),
     ));
+  }
+
+  _textfield() {
+    return TextField(
+      controller: controller,
+      decoration: const InputDecoration(hintText: 'Enter some text'),
+      autofocus: true,
+    );
+  }
+
+  _symbolMenu() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Hyphenation:'),
+        const SizedBox(width: 8),
+        DropdownMenu<String>(
+            enableSearch: false,
+            onSelected: (val) => setState(() => symbol = val!),
+            initialSelection: symbol,
+            dropdownMenuEntries: const [
+              DropdownMenuEntry<String>(value: '', label: 'None'),
+              DropdownMenuEntry<String>(value: '@', label: '@'),
+              DropdownMenuEntry<String>(value: "\u{00AD}", label: 'Soft wrap')
+            ]),
+      ],
+    );
   }
 }
