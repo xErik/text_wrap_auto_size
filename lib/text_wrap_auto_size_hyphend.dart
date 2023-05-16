@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyphenatorx/hyphenatorx.dart';
-import 'package:hyphenatorx/texttokens.dart';
-import 'package:text_wrap_auto_size/src/texthelper.dart';
-import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
 
 import 'solution.dart';
 import 'src/manager.dart';
@@ -28,6 +25,8 @@ class TextWrapAutoSizeHyphend extends StatefulWidget {
 
 class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
   late Future<Hyphenator> future;
+  Widget? cache;
+  String cacheKey = '';
 
   @override
   void initState() {
@@ -43,25 +42,48 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
   static Future<Solution> solution(Size size, Text text, String language,
       {String symbol = '\u{00AD}'}) async {
     final h = await Hyphenator.loadAsyncByAbbr(language, symbol: symbol);
-    final TextTokens tokens = h.hyphenateTextToTokens(text.data!);
-    return Manager().solution(text, size, tokens);
+    return Manager().solution(text, size, h);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Hyphenator>(
-        future: future,
-        builder: (ctx, snap) {
-          if (snap.connectionState == ConnectionState.waiting) {
-            return const SizedBox.shrink();
-          } else if (snap.hasError) {
-            throw snap.error!;
+      future: future,
+      builder: (ctx, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        } else if (snap.hasError) {
+          throw snap.error!;
+        }
+
+        final Hyphenator h = snap.data!;
+        // print('FUTURE');
+
+        // @override
+        return LayoutBuilder(builder: (BuildContext ctx, BoxConstraints cts) {
+          Size size = Size(cts.maxWidth, cts.maxHeight);
+          if (size.width == double.infinity || size.height == double.infinity) {
+            throw 'BoxContraints have infinite height: $size.\n\nTry wrapping: Expanded(child:TextWrapAutoSizeHyphend("text")).\n\nTry wrapping: SizedBox(width:250, height:250, child:TextWrapAutoSizeHyphend("text"))).\n\nTry wrapping: SizedBox(\n  width: MediaQuery.of(context).size.width,\n  height: MediaQuery.of(context).size.height,\n  child: TextWrapAutoSizeHyphend(Text(text)))';
           }
 
-          final String hyphend = snap.data!.hyphenateText(widget.text.data!);
+          final String cacheKeyCurrent =
+              '${widget.text.toString()}|${widget.language}|${widget.symbol}|${widget.doShowDebug}|$size';
 
-          return TextWrapAutoSize(TextHelper.clone(widget.text, hyphend),
-              doShowDebug: widget.doShowDebug);
+          if (cache == null || cacheKey != cacheKeyCurrent) {
+            print('WRAP FRESH');
+            // print('    cacheKey        $cacheKey');
+            // print('    cacheKeyCurrent $cacheKeyCurrent');
+            cacheKey = cacheKeyCurrent;
+            cache = (widget.doShowDebug)
+                ? Manager().wrapDebug(widget.text, size, h)
+                : Manager().wrap(widget.text, size, h);
+          } else {
+            print('WRAP FROM CACHE');
+          }
+
+          return cache!;
         });
+      },
+    );
   }
 }

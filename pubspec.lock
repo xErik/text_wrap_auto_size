@@ -73,7 +73,7 @@ packages:
       path: "../hyphenatorx"
       relative: true
     source: path
-    version: "1.4.0"
+    version: "1.5.2"
   js:
     dependency: transitive
     description:

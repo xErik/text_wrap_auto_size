@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Demo With Hyphenation',
       debugShowCheckedModeBanner: false,
       home: MainPage(),
@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final TextEditingController controller = TextEditingController(
+      text:
+          'The arts are a vast subdivision of culture, composed of many creative endeavors and disciplines.');
+
+  MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -27,16 +31,18 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   String text = '';
-  String symbol = '\u{00AD}';
-  final controller = TextEditingController(
-      text:
-          'The arts are a vast subdivision of culture, composed of many creative endeavors and disciplines.');
 
   @override
   void initState() {
     super.initState();
-    text = controller.text;
-    controller.addListener(() => setState(() => text = controller.text));
+    text = widget.controller.text;
+    widget.controller.addListener(
+      () => setState(() {
+        // if (widget.controller.text != text) {
+        text = widget.controller.text;
+        // }
+      }),
+    );
   }
 
   @override
@@ -46,55 +52,32 @@ class _MainPageState extends State<MainPage> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          _textfield(),
+          SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: TextFormField(
+                controller: widget.controller,
+                decoration: const InputDecoration(hintText: 'Enter some text'),
+                autofocus: true,
+              )),
           const SizedBox(height: 16),
-          _symbolMenu(),
-          const SizedBox(height: 16),
-          Container(
-            width: 250,
-            height: 250,
-            color: Colors.grey,
-            child:
-                // ValueKey(symbol) causes call of
-                // initState() in TextWrapAutoSizeHyphend, which is needed to
-                // re-initialize its FutureBuilder.
-                TextWrapAutoSizeHyphend(
-              Text(text),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: TextWrapAutoSizeHyphend(
+              Text(
+                text,
+                style: const TextStyle(
+                    color: Colors.red, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.right,
+                key: ValueKey(text), // Uh, why is ValueKey needed?
+              ),
               'en_us',
-              symbol: symbol,
               doShowDebug: true,
-              key: ValueKey(symbol),
             ),
           ),
         ],
       )),
     ));
-  }
-
-  _textfield() {
-    return TextField(
-      controller: controller,
-      decoration: const InputDecoration(hintText: 'Enter some text'),
-      autofocus: true,
-    );
-  }
-
-  _symbolMenu() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Hyphenation:'),
-        const SizedBox(width: 8),
-        DropdownMenu<String>(
-            enableSearch: false,
-            onSelected: (val) => setState(() => symbol = val!),
-            initialSelection: symbol,
-            dropdownMenuEntries: const [
-              DropdownMenuEntry<String>(value: '', label: 'None'),
-              DropdownMenuEntry<String>(value: '@', label: '@'),
-              DropdownMenuEntry<String>(value: "\u{00AD}", label: 'Soft wrap')
-            ]),
-      ],
-    );
   }
 }

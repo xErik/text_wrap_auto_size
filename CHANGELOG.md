@@ -52,3 +52,7 @@
 ## 1.0.8
 
 - README.
+
+## 1.1.0
+
+- Refactored `TextWrapAutoSizeHyphend`: Still slow if its text is dyanamically delivered by a `TextField`.

@@ -3,8 +3,7 @@ import 'dart:math' as m;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hyphenatorx/texttokens.dart';
-// import 'package:hyphenatorx/hyphenatorx.dart';
+import 'package:hyphenatorx/hyphenatorx.dart';
 import 'package:text_wrap_auto_size/solution.dart';
 import 'package:text_wrap_auto_size/src/strategy.dart';
 import 'package:text_wrap_auto_size/src/strategyhyphenate.dart';
@@ -22,15 +21,15 @@ class Manager {
   // ------------------------------------------------------------------------------
 
   /// Returns a Stack widget with the adjusted font size some debug output.
-  Stack wrapDebug(Text text, Size size, TextTokens? tokens) {
-    final sol = solution(text, size, tokens);
+  Stack wrapDebug(Text text, Size size, Hyphenator? h) {
+    final sol = solution(text, size, h);
     final txt = sol.text;
     final label =
         "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
 
     return Stack(
       children: [
-        Positioned(child: Container(color: Colors.red, child: txt)),
+        Positioned(child: Container(child: txt)),
         Positioned(
             right: 0,
             bottom: 0,
@@ -44,8 +43,8 @@ class Manager {
   }
 
   /// Returns a Text widget with the adjusted font size.
-  Text wrap(Text text, Size size, TextTokens? tokens) {
-    return solution(text, size, tokens).text;
+  Text wrap(Text text, Size size, Hyphenator? h) {
+    return solution(text, size, h).text;
   }
 
   // ------------------------------------------------------------------------------
@@ -54,9 +53,11 @@ class Manager {
 
   /// Returns solution object with the calculated results.
   /// The adjusted font size is stored in `style.fontSize`.
-  Solution solution(Text text, Size sizeOuter, TextTokens? tokens) {
-    final task = Challenge(text, sizeOuter, tokens: tokens);
-    strategy = tokens != null ? StrategyHyphenate() : StrategyNonHyphenate();
+  Solution solution(Text text, Size sizeOuter, Hyphenator? hyphenator) {
+    final task = Challenge(text, sizeOuter, hyphenator: hyphenator);
+
+    strategy =
+        hyphenator != null ? StrategyHyphenate() : StrategyNonHyphenate();
 
     Solution? solIsValid;
     Solution sol = strategy.dimensions(task);
@@ -67,7 +68,7 @@ class Manager {
 
       if (isValid) {
         solIsValid = sol;
-
+        // print('K: $solIsValid');
         if (isValidSame) {
           break;
         }
