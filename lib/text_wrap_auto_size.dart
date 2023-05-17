@@ -21,6 +21,10 @@ class TextWrapAutoSize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (text.data!.isEmpty) {
+      return const Text('');
+    }
+
     return LayoutBuilder(builder: (BuildContext ctx, BoxConstraints cts) {
       Size size = Size(cts.maxWidth, cts.maxHeight);
       if (size.width == double.infinity || size.height == double.infinity) {

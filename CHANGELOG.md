@@ -35,7 +35,7 @@
 
 ## 1.0.5+1
 
-- Added live example.
+- Added demo.
 
 ## 1.0.6
 
@@ -56,3 +56,8 @@
 ## 1.1.0
 
 - Refactored `TextWrapAutoSizeHyphend`.
+
+## 1.1.1
+
+- Performance, Quality.
+

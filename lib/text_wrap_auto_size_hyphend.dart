@@ -52,6 +52,10 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.text.data!.isEmpty) {
+      return const Text('');
+    }
+
     return FutureBuilder<Hyphenator>(
       future: future,
       builder: (ctx, snap) {
