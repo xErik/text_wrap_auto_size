@@ -78,10 +78,11 @@ packages:
   hyphenatorx:
     dependency: "direct main"
     description:
-      path: "../../../hyphenatorx"
-      relative: true
-    source: path
-    version: "1.1.3"
+      name: hyphenatorx
+      sha256: "1e5cca52c982e6f7c96460d4f01f645eb4d648385e191560819a6654804d0298"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.3"
   js:
     dependency: transitive
     description:
@@ -94,10 +95,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      sha256: "6b0206b0bf4f04961fc5438198ccb3a885685cd67d4d4a32cc20ad7f8adbe015"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.0"
   matcher:
     dependency: transitive
     description:
@@ -189,7 +190,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "1.0.8"
+    version: "1.1.0"
   vector_math:
     dependency: transitive
     description:
@@ -199,4 +200,4 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=3.0.0-0 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
