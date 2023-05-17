@@ -54,6 +54,10 @@ class Manager {
   /// Returns solution object with the calculated results.
   /// The adjusted font size is stored in `style.fontSize`.
   Solution solution(Text text, Size sizeOuter, Hyphenator? hyphenator) {
+    if (text.data!.isEmpty) {
+      return Solution(text, const TextStyle(), const Size(0, 0), sizeOuter);
+    }
+
     final task = Challenge(text, sizeOuter, hyphenator: hyphenator);
 
     strategy =

@@ -59,5 +59,13 @@
 
 ## 1.1.1
 
-- Performance, Quality.
+- Performance.
+
+## 1.1.2
+
+- Quality.
+
+## 1.1.3
+
+- hyphenatorx version update.
 

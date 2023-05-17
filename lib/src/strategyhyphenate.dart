@@ -14,7 +14,6 @@ class StrategyHyphenate implements Strategy {
   Solution dimensions(Challenge task) {
     final WrapResult wrap =
         task.hyphenator!.wrap(task.text, task.style, task.sizeOuter.width);
-
     //
     // Test for single word exceeding with.
     //

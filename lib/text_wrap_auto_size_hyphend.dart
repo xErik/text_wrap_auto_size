@@ -25,6 +25,17 @@ class TextWrapAutoSizeHyphend extends StatefulWidget {
   @override
   State<TextWrapAutoSizeHyphend> createState() =>
       _TextWrapAutoSizeHyphendState();
+
+  /// This method returns the calculated font size with respect to the given size.
+  ///
+  /// `Solution` has these fields: `String text`, `TextStyle style` and `Size size`.
+  /// The field `size` describes the Size of the text, not the bounding, outer box.
+  // ignore: unused_element
+  static Future<Solution> solution(Size size, Text text, String language,
+      {String symbol = '\u{00AD}'}) async {
+    final h = await Hyphenator.loadAsyncByAbbr(language, symbol: symbol);
+    return Manager().solution(text, size, h);
+  }
 }
 
 class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
@@ -37,17 +48,6 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
     super.initState();
     future = Hyphenator.loadAsyncByAbbr(widget.language,
         symbol: widget.symbol, hyphen: widget.hyphen);
-  }
-
-  /// This method returns the calculated font size with respect to the given size.
-  ///
-  /// `Solution` has these fields: `String text`, `TextStyle style` and `Size size`.
-  /// The field `size` describes the Size of the text, not the bounding, outer box.
-  // ignore: unused_element
-  static Future<Solution> solution(Size size, Text text, String language,
-      {String symbol = '\u{00AD}'}) async {
-    final h = await Hyphenator.loadAsyncByAbbr(language, symbol: symbol);
-    return Manager().solution(text, size, h);
   }
 
   @override

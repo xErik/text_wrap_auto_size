@@ -47,6 +47,6 @@ class Solution {
 
   @override
   String toString() {
-    return 'Solution: inner: $sizeInner outer: $sizeOuter ${style.fontFamily} / ${style.fontSize}';
+    return 'Solution: inner:$sizeInner outer:$sizeOuter font:${style.fontFamily} / size:${style.fontSize}';
   }
 }
