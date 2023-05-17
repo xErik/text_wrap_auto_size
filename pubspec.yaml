@@ -1,11 +1,11 @@
 name: text_wrap_auto_size
-description: Wraps text and auto sizes it dynamically with respect to the given space. 
-issues: https://github.com/xErik/text_wrap_auto_size/issues
+description: Wraps text and auto sizes it dynamically with respect to the given dimensions. 
+issue_tracker: https://github.com/xErik/text_wrap_auto_size/issues
 repository: https://github.com/xErik/text_wrap_auto_size
 
 version: 1.1.0
 
-publish_to: none
+# publish_to: none
 
 environment:
   # sdk: '>=2.19.6 <4.0.0'
@@ -15,9 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
   
-  hyphenatorx: 
-    path: ../hyphenatorx
-  # hyphenatorx: ^1.5.1
+  # hyphenatorx: 
+  #   path: ../hyphenatorx
+  hyphenatorx: ^1.5.3
 
 dev_dependencies:
   flutter_test:

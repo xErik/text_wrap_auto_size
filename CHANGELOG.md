@@ -55,4 +55,4 @@
 
 ## 1.1.0
 
-- Refactored `TextWrapAutoSizeHyphend`: Still slow if its text is dyanamically delivered by a `TextField`.
+- Refactored `TextWrapAutoSizeHyphend`.

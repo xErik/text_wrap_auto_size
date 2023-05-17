@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:text_wrap_auto_size/text_wrap_auto_size_hyphend.dart';
+import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
 
-class ExampleHyphenation extends StatefulWidget {
+class ExampleHyphenationNo extends StatefulWidget {
   final TextEditingController controller = TextEditingController(
       text:
           'The arts are a vast subdivision of culture, composed of many creative endeavors and disciplines.');
 
-  ExampleHyphenation({super.key});
+  ExampleHyphenationNo({super.key});
 
   @override
-  State<ExampleHyphenation> createState() => _ExampleHyphenationState();
+  State<ExampleHyphenationNo> createState() => _ExampleHyphenationNoState();
 }
 
-class _ExampleHyphenationState extends State<ExampleHyphenation> {
+class _ExampleHyphenationNoState extends State<ExampleHyphenationNo> {
   String text = '';
 
   @override
@@ -47,7 +47,7 @@ class _ExampleHyphenationState extends State<ExampleHyphenation> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.9,
-            child: TextWrapAutoSizeHyphend(
+            child: TextWrapAutoSize(
               Text(
                 text,
                 style: const TextStyle(
@@ -55,7 +55,6 @@ class _ExampleHyphenationState extends State<ExampleHyphenation> {
                 textAlign: TextAlign.right,
                 key: ValueKey(text), // Uh, why is ValueKey needed?
               ),
-              'en_us',
               doShowDebug: true,
             ),
           ),

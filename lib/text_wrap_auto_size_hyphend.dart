@@ -6,17 +6,21 @@ import 'src/manager.dart';
 
 /// This widget auto sizes a Text with respect to the given bounds.
 ///
-/// This widget hyphenates the given `Test`.
+/// This widget hyphenates the given `Text`.
 ///
 /// Throws, if unrestricted (infinite) bounds are given.
 class TextWrapAutoSizeHyphend extends StatefulWidget {
   final Text text;
   final String language;
   final String symbol;
+  final String hyphen;
   final bool doShowDebug;
 
   const TextWrapAutoSizeHyphend(this.text, this.language,
-      {this.symbol = '\u{00AD}', this.doShowDebug = false, super.key});
+      {this.symbol = '\u{00AD}',
+      this.hyphen = '-',
+      this.doShowDebug = false,
+      super.key});
 
   @override
   State<TextWrapAutoSizeHyphend> createState() =>
@@ -31,7 +35,8 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
   @override
   void initState() {
     super.initState();
-    future = Hyphenator.loadAsyncByAbbr(widget.language, symbol: widget.symbol);
+    future = Hyphenator.loadAsyncByAbbr(widget.language,
+        symbol: widget.symbol, hyphen: widget.hyphen);
   }
 
   /// This method returns the calculated font size with respect to the given size.
@@ -67,10 +72,10 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
           }
 
           final String cacheKeyCurrent =
-              '${widget.text.toString()}|${widget.language}|${widget.symbol}|${widget.doShowDebug}|$size';
+              '${widget.text.toString()}|${widget.language}|${widget.symbol}|${widget.hyphen}|${widget.doShowDebug}|$size';
 
           if (cache == null || cacheKey != cacheKeyCurrent) {
-            print('WRAP FRESH');
+            // print('WRAP FRESH');
             // print('    cacheKey        $cacheKey');
             // print('    cacheKeyCurrent $cacheKeyCurrent');
             cacheKey = cacheKeyCurrent;
@@ -78,7 +83,7 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
                 ? Manager().wrapDebug(widget.text, size, h)
                 : Manager().wrap(widget.text, size, h);
           } else {
-            print('WRAP FROM CACHE');
+            // print('WRAP FROM CACHE');
           }
 
           return cache!;

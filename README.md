@@ -1,12 +1,12 @@
 # text_wrap_auto_size
 
-Wraps text and auto sizes it with respect to the given space.
+Wraps text and auto sizes it with respect to the given dimensions.
 
 The text is never cut off. Insteads, it will apply the largest font size possible to fill the maximum of the available space.
 
 Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
 
-Find a live demo [here](https://xerik.github.io/text_wrap_auto_size/).
+Test the live demo [here](https://xerik.github.io/text_wrap_auto_size/).
 
 ## Requirements 
 
@@ -20,14 +20,14 @@ Generally, several Text attributes are respected, `style` probably being the mos
 final style = TextStyle(
     fontWeight: FontWeight.bold, 
     color: Colors.red,
-    fontFamiliy: 'Courier',
+    fontFamiliy: 'Courier', // some fonts: strange results 
 );
 
 final text = Text(
     'text',
     style: style,
     textAlign: TextAlign.center,
-    locale: Locale('de'),
+    locale: Locale('en'),
     textScaleFactor: 1.0,
     semanticsLabel: 'semanticsLabel',
     strutStyle: StrutStyle(),
@@ -41,19 +41,19 @@ TextWrapAutoSize(text);
 
 // Or with automatic hyphenation:
 
-TextWrapAutoSizeHyphend(text);
+TextWrapAutoSizeHyphend(text,'en_us');
 ```
 
 ### Use As Method
 
-The static method `solution` allows for accessing the resulting font size directly, which resides in the `TextStyle`. Using the result, one can construct a font size adjusted widget manually.
+The static method `solution` allows for accessing the resulting font size directly, which resides in the `TextStyle`. Using this result, one can construct a font size adjusted widget manually.
 
 ```dart
 Solution sol = TextWrapAutoSize.solution(Size size, Text text);
 
 // Or with automatic hyphenation:
 
-TextWrapAutoSizeHyphend.solution(Size size, Text text, 'en_us');
+Solution sol = TextWrapAutoSizeHyphend.solution(Size size, Text text, 'en_us');
 
 // String text for easy reference.
 
@@ -94,6 +94,14 @@ SizedBox(
     child: TextWrapAutoSize(Text('text'))
 );
 
+// Or with hyphens:
+
+SizedBox(
+    width:250,
+    height:250,
+    child: TextWrapAutoSizeHyphend(Text('text'), 'en_us')
+);
+
 // In some cases, width and height can be determined 
 // by wrapping the widget in `Expanded`.
 
@@ -120,6 +128,11 @@ TextWrapAutoSize(
     Text('text'), 
     doShowDebug: true
 )
+
+TextWrapAutoSizeHyphend(Text('text'), 
+    'en_us', 
+    doShowDebug: true
+)
 ```
 
 ## Alternatives
@@ -134,9 +147,8 @@ Internally, the widget performs a binary-search for the optimal font size and re
 
 In my typical use cases, the widgets needs nine steps to find the optimal font size.
 
-### TODO 
+### Todo
 
-* Hyphenation?
 * Clipping the text?
 * Setting min and max sizes (depends on clipping)?
 
