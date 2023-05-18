@@ -44,7 +44,11 @@ class Manager {
 
   /// Returns a Text widget with the adjusted font size.
   Text wrap(Text text, Size size, Hyphenator? h) {
-    return solution(text, size, h).text;
+    final sol = solution(text, size, h);
+    // final txt = ;
+    // print("sol.txt.style!.fontSize: ${sol.text.style!.fontSize}");
+    // print("sol.style!.fontSize: ${sol.style.fontSize}");
+    return sol.text;
   }
 
   // ------------------------------------------------------------------------------
@@ -70,16 +74,16 @@ class Manager {
       bool isValid = sol.isValid;
       bool isValidSame = sol.isValidSame;
 
+      if (kDebugMode && (sol.isValid || sol.isValidSame)) {
+        // print(" ? $sol");
+      }
+
       if (isValid) {
         solIsValid = sol;
-        // print('K: $solIsValid');
         if (isValidSame) {
           break;
         }
       }
-
-      // print(
-      //     "SOL: ${sol.size} ${sol.style.fontSize} CTS: $cts isSmaller: $isSmaller isLarger: $isLarger");
 
       int? candidate = _candidate(isValid);
 
@@ -96,7 +100,7 @@ class Manager {
       throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
-    solIsValid.fontSizeTests = _candidatesFormer.length;
+    solIsValid.fontSizeTests = _candidatesFormer.length + 1;
 
     if (kDebugMode) {
       d.log(

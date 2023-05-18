@@ -47,6 +47,6 @@ class Solution {
 
   @override
   String toString() {
-    return 'Solution: inner:$sizeInner outer:$sizeOuter font:${style.fontFamily} / size:${style.fontSize}';
+    return 'Sol: in:${sizeInner.width}/${sizeInner.height} out:${sizeOuter.width}/${sizeOuter.height} font:${style.fontFamily} size:${style.fontSize} >$textString< isValid/Same:${isValid || isValidSame} ${fontSizeTests == -1 ? '' : "rounds:$fontSizeTests"}';
   }
 }

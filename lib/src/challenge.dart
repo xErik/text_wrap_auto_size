@@ -11,8 +11,12 @@ class Challenge {
       {double fontSize = 14, this.hyphenator}) {
     if (text.style == null) {
       style = TextStyle(fontSize: fontSize);
-    } else if (text.style!.fontSize == null) {
-      style = text.style!.copyWith(fontSize: fontSize);
+    } else {
+      if (text.style!.fontSize == null) {
+        style = text.style!.copyWith(fontSize: fontSize);
+      } else {
+        style = text.style!;
+      }
     }
   }
 

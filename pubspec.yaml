@@ -27,4 +27,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: roboto
+      fonts:
+        - asset: test/Roboto-Regular.ttf
  
