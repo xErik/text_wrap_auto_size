@@ -27,9 +27,22 @@ class Challenge {
     );
   }
 
+  static final _reWhitespace = RegExp(r'[\s\t\r\n ]+');
+
   Size paintText() {
+    final isOneWord = text.data!.contains(_reWhitespace) == false;
+
+    // print('isOneWord: $isOneWord ${text.data}');
+
     painter!.text = TextSpan(text: text.data, style: style);
-    painter!.layout(minWidth: 0, maxWidth: sizeOuter.width);
+    painter!.maxLines = isOneWord ? 1 : text.maxLines;
+    painter!.layout(maxWidth: sizeOuter.width);
+
+    if (painter!.didExceedMaxLines) {
+      // mark this size as invalid, especially if isOneWord is true.
+      return Size(sizeOuter.width + 1, sizeOuter.height + 1);
+    }
+
     return painter!.size;
   }
 

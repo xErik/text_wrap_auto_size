@@ -25,6 +25,8 @@ class Solution {
       textAlign: _text.textAlign,
       locale: _text.locale,
       softWrap: _text.softWrap,
+      // textScaleFactor has to be 1 for correct results.
+      // Manager.solution() takes care of that.
       textScaleFactor: _text.textScaleFactor,
       // maxLines: isOneLine ? 1 : null,
       semanticsLabel: _text.semanticsLabel,

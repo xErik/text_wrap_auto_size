@@ -8,6 +8,7 @@ import 'package:text_wrap_auto_size/solution.dart';
 import 'package:text_wrap_auto_size/src/strategy.dart';
 import 'package:text_wrap_auto_size/src/strategyhyphenate.dart';
 import 'package:text_wrap_auto_size/src/strategynonhyphenate.dart';
+import 'package:text_wrap_auto_size/src/texthelper.dart';
 
 import 'challenge.dart';
 
@@ -44,9 +45,11 @@ class Manager {
 
   /// Returns a Text widget with the adjusted font size.
   Text wrap(Text text, Size size, Hyphenator? h) {
-    final sol = solution(text, size, h);
+    final Solution sol = solution(text, size, h);
+    // print(sol.text.style);
+    // print(sol.style);
     // final txt = ;
-    // print("sol.txt.style!.fontSize: ${sol.text.style!.fontSize}");
+    // print("sol.txt.style!: ${sol.text.style!}");
     // print("sol.style!.fontSize: ${sol.style.fontSize}");
     return sol.text;
   }
@@ -62,7 +65,10 @@ class Manager {
       return Solution(text, const TextStyle(), const Size(0, 0), sizeOuter);
     }
 
-    final task = Challenge(text, sizeOuter, 14, hyphenator: hyphenator);
+    final textScalingOne = TextHelper.cloneWithScalingFactorOne(text);
+
+    final task =
+        Challenge(textScalingOne, sizeOuter, 14, hyphenator: hyphenator);
 
     strategy =
         hyphenator != null ? StrategyHyphenate() : StrategyNonHyphenate();
@@ -75,9 +81,9 @@ class Manager {
       bool isValidSame = sol.isValidSame;
 
       if (isValid) {
-        // if (kDebugMode) {
-        //   print(" ? $sol");
-        // }
+        if (kDebugMode) {
+          print(" ? $sol");
+        }
 
         solIsValid = sol;
         if (isValidSame) {

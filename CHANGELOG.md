@@ -8,11 +8,11 @@
 
 ## 1.0.1+2
 
-- README update.
+- README.
 
 ## 1.0.2
 
-- README update.
+- README.
 - Optimization.
 
 ## 1.0.3
@@ -21,17 +21,17 @@
 
 ## 1.0.3+1
 
-- README update.
+- README.
 
 ## 1.0.4
 
 - Removed Text.softWrap
-- README update.
+- README.
 
 ## 1.0.5
 
 - Added corrected Text.softWrap
-- README update.
+- README.
 
 ## 1.0.5+1
 
@@ -73,3 +73,9 @@
 
 - Bugfix regarding pre-defined fontSize.
 - Code cleaning.
+
+## 1.1.5 // to publish
+
+- Bugfix regarding one-word input.
+- Bugfix regarding textScalingFactor on Android.
+- Bugfix regarding Demo on Android.

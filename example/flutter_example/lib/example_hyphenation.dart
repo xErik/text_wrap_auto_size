@@ -12,7 +12,8 @@ class ExampleHyphenation extends StatefulWidget {
   State<ExampleHyphenation> createState() => _ExampleHyphenationState();
 }
 
-class _ExampleHyphenationState extends State<ExampleHyphenation> {
+class _ExampleHyphenationState extends State<ExampleHyphenation>
+    with AutomaticKeepAliveClientMixin<ExampleHyphenation> {
   String text = '';
 
   @override
@@ -30,6 +31,7 @@ class _ExampleHyphenationState extends State<ExampleHyphenation> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -63,4 +65,7 @@ class _ExampleHyphenationState extends State<ExampleHyphenation> {
       )),
     ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

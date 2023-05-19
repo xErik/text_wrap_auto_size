@@ -12,7 +12,8 @@ class ExampleHyphenationNo extends StatefulWidget {
   State<ExampleHyphenationNo> createState() => _ExampleHyphenationNoState();
 }
 
-class _ExampleHyphenationNoState extends State<ExampleHyphenationNo> {
+class _ExampleHyphenationNoState extends State<ExampleHyphenationNo>
+    with AutomaticKeepAliveClientMixin<ExampleHyphenationNo> {
   String text = '';
 
   @override
@@ -30,6 +31,7 @@ class _ExampleHyphenationNoState extends State<ExampleHyphenationNo> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -62,4 +64,7 @@ class _ExampleHyphenationNoState extends State<ExampleHyphenationNo> {
       )),
     ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

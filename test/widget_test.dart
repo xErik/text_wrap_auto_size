@@ -28,13 +28,17 @@ void main() {
     );
   });
 
-  test('empty', () async {
+  // -------------------------------------------------------------------
+  // FUNCTION
+  // -------------------------------------------------------------------
+
+  test('function-empty', () async {
     Solution sol = await TextWrapAutoSizeHyphend.solution(
         const Size(50, 50), Text('', style: sRoboto), 'en_us');
     expect(sol.textString, '');
   });
 
-  test('widget-solution-hyphen-multiple-words', () async {
+  test('function-solution-hyphen-multiple-words', () async {
     const expected = """
 The arts are
 a vast subdi-
@@ -58,7 +62,7 @@ plines.""";
     expect(sol.isValid, true);
   });
 
-  test('widget-solution-hyphen-single-word', () async {
+  test('function-solution-hyphen-single-word', () async {
     Solution sol = await TextWrapAutoSizeHyphend.solution(
         const Size(350, 720), Text('hello', style: sRoboto), 'en_us');
     expect(sol.textString, 'hello');
@@ -69,21 +73,26 @@ plines.""";
     expect(sol.isValid, true);
   });
 
-  test('widget-solution-nohyphen-single-word', () {
+  test('function-solution-nohyphen-single-word', () {
     Solution sol = TextWrapAutoSize.solution(
         const Size(360, 509), Text('test', style: sRoboto));
     expect(sol.textString, 'test');
-    expect(sol.style.fontSize, 217);
-    expect(sol.text.style!.fontSize, 217);
+    expect(sol.style.fontSize, 211);
+    expect(sol.text.style!.fontSize, 211);
     expect(sol.isValid, true);
     expect(sol.fontSizeTests, 9);
+    expect(sol.sizeInner, const Size(359, 247)); // !?
   });
+
+  // -------------------------------------------------------------------
+  // INTERNALS
+  // -------------------------------------------------------------------
 
   test('manager-wrap-single-word', () {
     Text sol = Manager()
         .wrap(Text('test', style: sRoboto), const Size(360, 509), null);
     expect(sol.data!, 'test');
-    expect(sol.style!.fontSize, 217);
+    expect(sol.style!.fontSize, 211);
   });
 
   test('manager-wrap-multiple-words', () {
