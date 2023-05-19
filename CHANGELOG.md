@@ -69,3 +69,7 @@
 
 - hyphenatorx version update.
 
+## 1.1.4
+
+- Bugfix regarding pre-defined fontSize.
+- Code cleaning.

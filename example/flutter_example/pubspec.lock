@@ -76,13 +76,13 @@ packages:
     source: sdk
     version: "0.0.0"
   hyphenatorx:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hyphenatorx
-      sha256: "548622808914e84c5c5ac8b0bfb4636b79eea7315a484cf5ad8baecfd1083721"
+      sha256: "54baba3a3ecfdb878ea2525eea6dafc41d35133689fd655cb1fd36094c52f942"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.4"
+    version: "1.5.5"
   js:
     dependency: transitive
     description:

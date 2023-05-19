@@ -62,7 +62,7 @@ class Manager {
       return Solution(text, const TextStyle(), const Size(0, 0), sizeOuter);
     }
 
-    final task = Challenge(text, sizeOuter, hyphenator: hyphenator);
+    final task = Challenge(text, sizeOuter, 14, hyphenator: hyphenator);
 
     strategy =
         hyphenator != null ? StrategyHyphenate() : StrategyNonHyphenate();
@@ -74,11 +74,11 @@ class Manager {
       bool isValid = sol.isValid;
       bool isValidSame = sol.isValidSame;
 
-      if (kDebugMode && (sol.isValid || sol.isValidSame)) {
-        // print(" ? $sol");
-      }
-
       if (isValid) {
+        // if (kDebugMode) {
+        //   print(" ? $sol");
+        // }
+
         solIsValid = sol;
         if (isValidSame) {
           break;

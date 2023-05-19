@@ -3,7 +3,7 @@ description: Wraps text and auto sizes it dynamically with respect to the given 
 issue_tracker: https://github.com/xErik/text_wrap_auto_size/issues
 repository: https://github.com/xErik/text_wrap_auto_size
 
-version: 1.1.3
+version: 1.1.4
 
 # publish_to: none
 
@@ -17,7 +17,7 @@ dependencies:
   
   # hyphenatorx: 
   #   path: ../hyphenatorx
-  hyphenatorx: ^1.5.4
+  hyphenatorx: ^1.5.5
 
 dev_dependencies:
   flutter_test:
@@ -29,7 +29,7 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: roboto
+    - family: Roboto
       fonts:
         - asset: test/Roboto-Regular.ttf
  

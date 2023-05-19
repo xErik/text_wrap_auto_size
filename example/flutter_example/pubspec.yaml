@@ -15,7 +15,7 @@ dependencies:
   text_wrap_auto_size:
     path: ../../
 
-  hyphenatorx: ^1.5.3
+  # hyphenatorx: ^1.5.5
   # hyphenatorx: 
   #   path: ../../../hyphenatorx
 

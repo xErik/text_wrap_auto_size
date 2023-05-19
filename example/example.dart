@@ -53,7 +53,7 @@ class _ExampleHyphenationState extends State<ExampleHyphenation> {
                 style: const TextStyle(
                     color: Colors.red, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.right,
-                key: ValueKey(text), // Uh, why is ValueKey needed?
+                key: ValueKey(text),
               ),
               'en_us',
               doShowDebug: true,
