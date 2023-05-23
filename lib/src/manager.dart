@@ -46,11 +46,6 @@ class Manager {
   /// Returns a Text widget with the adjusted font size.
   Text wrap(Text text, Size size, Hyphenator? h) {
     final Solution sol = solution(text, size, h);
-    // print(sol.text.style);
-    // print(sol.style);
-    // final txt = ;
-    // print("sol.txt.style!: ${sol.text.style!}");
-    // print("sol.style!.fontSize: ${sol.style.fontSize}");
     return sol.text;
   }
 
@@ -81,9 +76,9 @@ class Manager {
       bool isValidSame = sol.isValidSame;
 
       if (isValid) {
-        if (kDebugMode) {
-          print(" ? $sol");
-        }
+        // if (kDebugMode) {
+        //   print(" ? $sol");
+        // }
 
         solIsValid = sol;
         if (isValidSame) {
@@ -96,6 +91,11 @@ class Manager {
       if (candidate == null) {
         break;
       } else {
+        // bugfix, though this should never happen?
+        if (candidate == task.style.fontSize) {
+          continue;
+        }
+
         final taskNew = task.cloneWithFontSize(candidate.toDouble());
         sol = strategy.dimensions(taskNew);
       }

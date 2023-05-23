@@ -29,7 +29,7 @@ void main() {
   });
 
   // -------------------------------------------------------------------
-  // FUNCTION
+  // FUNCTION HYPHEN
   // -------------------------------------------------------------------
 
   test('function-empty', () async {
@@ -73,7 +73,11 @@ plines.""";
     expect(sol.isValid, true);
   });
 
-  test('function-solution-nohyphen-single-word', () {
+  // -------------------------------------------------------------------
+  // FUNCTION NO-HYPHEN
+  // -------------------------------------------------------------------
+
+  test('function-solution-nohyphen-one-word', () {
     Solution sol = TextWrapAutoSize.solution(
         const Size(360, 509), Text('test', style: sRoboto));
     expect(sol.textString, 'test');
@@ -84,19 +88,31 @@ plines.""";
     expect(sol.sizeInner, const Size(359, 247)); // !?
   });
 
+  test('function-solution-nohyphen-two-words', () {
+    Solution sol = TextWrapAutoSize.solution(
+        const Size(360, 509), Text('test test', style: sRoboto));
+    expect(sol.textString, 'test\ntest');
+  });
+
   // -------------------------------------------------------------------
   // INTERNALS
   // -------------------------------------------------------------------
 
-  test('manager-wrap-single-word', () {
+  test('manager-wrap-nohyphen-single-word', () {
     Text sol = Manager()
         .wrap(Text('test', style: sRoboto), const Size(360, 509), null);
     expect(sol.data!, 'test');
     expect(sol.style!.fontSize, 211);
   });
 
-  test('manager-wrap-multiple-words', () {
-    const expected = text;
+  test('manager-wrap-nohyphen-multiple-words', () {
+    const expected = """The arts are a
+vast subdivision
+of culture,
+composed of
+many creative
+endeavors and
+disciplines.""";
 
     Text sol =
         Manager().wrap(Text(text, style: sRoboto), const Size(100, 100), null);

@@ -6,7 +6,11 @@ The text is never cut off. Insteads, it will apply the largest font size possibl
 
 Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
 
-Test the live demo [https://xerik.github.io/text_wrap_auto_size/](https://xerik.github.io/text_wrap_auto_size/)
+Test the live demo [https://xerik.github.io/text_wrap_auto_size/](https://xerik.github.io/text_wrap_auto_size/).
+
+**Hyphenation**
+
+This package uses [hyphenatorx](https://pub.dev/packages/hyphenatorx) for hyphenation based on `tex` defintions.
 
 ## Requirements 
 

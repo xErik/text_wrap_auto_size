@@ -1,3 +1,5 @@
+import 'package:hyphenatorx/hyphenatorx.dart';
+import 'package:hyphenatorx/token/wrapresult.dart';
 import 'package:text_wrap_auto_size/solution.dart';
 import 'package:text_wrap_auto_size/src/strategy.dart';
 
@@ -6,6 +8,9 @@ import 'challenge.dart';
 class StrategyNonHyphenate implements Strategy {
   @override
   Solution dimensions(Challenge task) {
-    return Solution(task.text, task.style, task.paintText(), task.sizeOuter);
+    final WrapResult wrap =
+        Hyphenator.wrapNoHyphen(task.text, task.style, task.sizeOuter.width);
+
+    return Solution(wrap.text, wrap.style, wrap.size, task.sizeOuter);
   }
 }

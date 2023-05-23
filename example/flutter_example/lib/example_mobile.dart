@@ -51,8 +51,8 @@ class _ExampleMobileState extends State<ExampleMobile>
               const SizedBox(height: 16),
               Container(
                 color: Colors.green,
-                width: 360,
-                height: 509,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 child: TextWrapAutoSize(
                   Text(
                     text,

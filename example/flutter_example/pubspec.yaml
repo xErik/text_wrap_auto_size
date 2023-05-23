@@ -15,10 +15,6 @@ dependencies:
   text_wrap_auto_size:
     path: ../../
 
-  # hyphenatorx: ^1.5.5
-  # hyphenatorx: 
-  #   path: ../../../hyphenatorx
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

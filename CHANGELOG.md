@@ -71,11 +71,16 @@
 
 ## 1.1.4
 
-- Bugfix regarding pre-defined fontSize.
+- Bugfix: pre-defined fontSize.
 - Code cleaning.
 
-## 1.1.5 // to publish
+## 1.1.5
 
-- Bugfix regarding one-word input.
-- Bugfix regarding textScalingFactor on Android.
-- Bugfix regarding Demo on Android.
+- Bugfix: one-word input.
+- Bugfix: textScalingFactor on Android.
+- Bugfix: Demo on Android.
+- Switched NoHyphenation-strategy to `hyphenatorx`.
+
+## 1.1.6 
+
+- Bugfix: Challenge-object created with same font size in edge cases.
