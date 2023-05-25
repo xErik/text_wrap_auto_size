@@ -84,3 +84,7 @@
 ## 1.1.6 
 
 - Bugfix: Challenge-object created with same font size in edge cases.
+
+## 1.1.6+1 
+
+- README.

@@ -1,44 +1,42 @@
 # text_wrap_auto_size
 
-Wraps text and auto sizes it with respect to the given dimensions.
+Wraps text and auto sizes it with respect to the given dimensions, including style, text properties and correct hyphenation.
 
-The text is never cut off. Insteads, it will apply the largest font size possible to fill the maximum of the available space.
+The text is never cut off. Insteads, it will apply the largest font size possible to fill the maximum of the available space. Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
 
-Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
-
-Test the live demo [https://xerik.github.io/text_wrap_auto_size/](https://xerik.github.io/text_wrap_auto_size/).
+Test the live demo [live demo](https://xerik.github.io/text_wrap_auto_size/).
 
 **Hyphenation**
 
-This package uses [hyphenatorx](https://pub.dev/packages/hyphenatorx) for hyphenation based on `tex` defintions.
+This package uses [hyphenatorx](https://pub.dev/packages/hyphenatorx) for hyphenation based on `tex` defintions for various languages.
 
-## Requirements 
+**Requirements**
 
 The widget **requires** a given width and height. It will throw an Exception, if it reveives an unbound (infinite) width or height. More about Flutter contraints [here](https://docs.flutter.dev/ui/layout/constraints).
 
+## Philosophy
+
+`Text` and `TextStyle` contain all relevant properties. The widgets and method calls of this package accept a `Text` object and respect its `TextStyle`. 
+
 ## Usage
 
-Generally, several Text attributes are respected, `style` probably being the most important one.
+### Quickstart
+
+Generally, several Text attributes are respected, `style` probably being the most important one. The attributes given below are not complete.
 
 ```dart
 final style = TextStyle(
     fontWeight: FontWeight.bold, 
     color: Colors.red,
-    fontFamiliy: 'Courier', // some fonts: strange results 
+    fontFamiliy: 'Courier',  
+    // ...
 );
 
 final text = Text(
     'text',
     style: style,
     textAlign: TextAlign.center,
-    locale: Locale('en'),
-    textScaleFactor: 1.0,
-    semanticsLabel: 'semanticsLabel',
-    strutStyle: StrutStyle(),
-    textWidthBasis: TextWidthBasis.parent,
-    textDirection: TextDirection.ltr,
-    softWrap: true, // set to false for text on one line
-    // maxLines: 2 <--- IGNORED !
+    // ...
 );
 
 TextWrapAutoSize(text);
@@ -50,7 +48,9 @@ TextWrapAutoSizeHyphend(text,'en_us');
 
 ### Use As Method
 
-The static method `solution` allows for accessing the resulting font size directly, which resides in the `TextStyle`. Using this result, one can construct a font size adjusted widget manually.
+The static method `solution` allows for accessing the computed data progrmmatically. The mmost important one is probably `TextStyle`, its `fontSize` set to the calculated font size. 
+
+construct a font size adjusted widget manually or .
 
 ```dart
 Solution sol = TextWrapAutoSize.solution(Size size, Text text);
@@ -113,7 +113,8 @@ Expanded(
     child: TextWrapAutoSize(Text('text'))
 );
 
-// Use it as the `Scaffold`'s body.
+// Or use it as the `Scaffold`'s body, also allows for 
+// correct determination of width and height.
 
 @override
 Widget build(BuildContext context) {
@@ -147,9 +148,7 @@ The package [magic_text](https://pub.dev/packages/magic_text) does something sim
 
 ## Background 
 
-Internally, the widget performs a binary-search for the optimal font size and renders the text multiple times in its own render-tree.
-
-In my typical use cases, the widgets needs nine steps to find the optimal font size.
+Internally, the widget performs a binary-search for the optimal font size and renders the text multiple times in its own render-tree. In typical use cases, the widgets needs nine steps to find the optimal font size.
 
 ### Todo
 

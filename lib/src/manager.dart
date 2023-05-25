@@ -85,7 +85,7 @@ class Manager {
           break;
         }
       }
-
+      const TextStyle();
       int? candidate = _candidate(isValid);
 
       if (candidate == null) {
