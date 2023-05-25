@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'example_hyphenation.dart';
-import 'example_hyphenation_no.dart';
 import 'example_mobile.dart';
 
 void main() {
@@ -16,14 +15,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 0,
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'Hyphenation'),
-                Tab(text: 'Np Hyphenation'),
+                // Tab(text: 'Np Hyphenation'),
                 Tab(text: 'Mobile'),
               ],
             ),
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               ExampleHyphenation(),
-              ExampleHyphenationNo(),
+              // ExampleHyphenationNo(),
               ExampleMobile(),
             ],
           ),

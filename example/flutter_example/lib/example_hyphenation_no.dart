@@ -15,6 +15,9 @@ class ExampleHyphenationNo extends StatefulWidget {
 class _ExampleHyphenationNoState extends State<ExampleHyphenationNo>
     with AutomaticKeepAliveClientMixin<ExampleHyphenationNo> {
   String text = '';
+  TextAlign align = TextAlign.right;
+  Color color = Colors.red;
+  FontWeight weight = FontWeight.w900;
 
   @override
   void initState() {
@@ -22,11 +25,23 @@ class _ExampleHyphenationNoState extends State<ExampleHyphenationNo>
     text = widget.controller.text;
     widget.controller.addListener(
       () => setState(() {
-        // if (widget.controller.text != text) {
-        text = widget.controller.text;
-        // }
+        if (widget.controller.text != text) {
+          text = widget.controller.text;
+        }
       }),
     );
+  }
+
+  void setAlign(TextAlign value) {
+    setState(() => align = value);
+  }
+
+  void setColor(Color value) {
+    setState(() => color = value);
+  }
+
+  void setWeight(FontWeight value) {
+    setState(() => weight = value);
   }
 
   @override

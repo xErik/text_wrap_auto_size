@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:text_wrap_auto_size/text_wrap_auto_size.dart';
 import 'package:text_wrap_auto_size/text_wrap_auto_size_hyphend.dart';
+
+import 'edit_row.dart';
 
 class ExampleHyphenation extends StatefulWidget {
   final TextEditingController controller = TextEditingController(
@@ -15,6 +18,10 @@ class ExampleHyphenation extends StatefulWidget {
 class _ExampleHyphenationState extends State<ExampleHyphenation>
     with AutomaticKeepAliveClientMixin<ExampleHyphenation> {
   String text = '';
+  TextAlign align = TextAlign.right;
+  Color color = Colors.red;
+  FontWeight weight = FontWeight.w900;
+  bool isHyphenation = false;
 
   @override
   void initState() {
@@ -22,11 +29,27 @@ class _ExampleHyphenationState extends State<ExampleHyphenation>
     text = widget.controller.text;
     widget.controller.addListener(
       () => setState(() {
-        // if (widget.controller.text != text) {
-        text = widget.controller.text;
-        // }
+        if (widget.controller.text != text) {
+          text = widget.controller.text;
+        }
       }),
     );
+  }
+
+  void setAlign(TextAlign value) {
+    setState(() => align = value);
+  }
+
+  void setColor(Color value) {
+    setState(() => color = value);
+  }
+
+  void setWeight(FontWeight value) {
+    setState(() => weight = value);
+  }
+
+  void setHyphenation(bool value) {
+    setState(() => isHyphenation = value);
   }
 
   @override
@@ -34,35 +57,41 @@ class _ExampleHyphenationState extends State<ExampleHyphenation>
     super.build(context);
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(
-          child: Column(
+      body: Column(
         children: [
-          SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: TextFormField(
-                controller: widget.controller,
-                decoration: const InputDecoration(hintText: 'Enter some text'),
-                autofocus: true,
-              )),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: TextWrapAutoSizeHyphend(
-              Text(
-                text,
-                style: const TextStyle(
-                    color: Colors.red, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.right,
-                key: ValueKey(text), // Uh, why is ValueKey needed?
-              ),
-              'en_us',
-              doShowDebug: true,
+          Flexible(
+            flex: 2,
+            child: EditRow(
+              widget.controller,
+              setAlign,
+              setColor,
+              setWeight,
+              setHyphenation,
+              align,
+              color,
+              weight,
+              isHyphenation,
             ),
           ),
+          const SizedBox(height: 16),
+          Flexible(
+              flex: 8,
+              child: isHyphenation
+                  ? TextWrapAutoSizeHyphend(
+                      Text(text,
+                          style: TextStyle(color: color, fontWeight: weight),
+                          textAlign: align),
+                      'en_us',
+                      doShowDebug: true,
+                    )
+                  : TextWrapAutoSize(
+                      Text(text,
+                          style: TextStyle(color: color, fontWeight: weight),
+                          textAlign: align),
+                      doShowDebug: true,
+                    )),
         ],
-      )),
+      ),
     ));
   }
 
