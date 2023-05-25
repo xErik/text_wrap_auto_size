@@ -2,13 +2,16 @@
 
 Wraps text and auto sizes it with respect to the given dimensions, including style, text properties and correct hyphenation.
 
-The text is never cut off. Insteads, it will apply the largest font size possible to fill the maximum of the available space. Changing the text or changing the boundaries triggers a new layout cycle, thus adapting the text size dynamically.
+* Scales font size of automatically.
+* But also accessing the font size calculation programmatically.
+* Hyphenation for various languages.
+* Binary search instead of linear search for best font size.
 
-Test the live demo [live demo](https://xerik.github.io/text_wrap_auto_size/).
+[Live demo here](https://xerik.github.io/text_wrap_auto_size/).
 
 **Hyphenation**
 
-This package uses [hyphenatorx](https://pub.dev/packages/hyphenatorx) for hyphenation based on `tex` defintions for various languages.
+[hyphenatorx](https://pub.dev/packages/hyphenatorx) does the hyphenation for various languages.
 
 **Requirements**
 
@@ -17,8 +20,6 @@ The widget **requires** a given width and height. It will throw an Exception, if
 ## Philosophy
 
 `Text` and `TextStyle` contain all relevant properties. The widgets and method calls of this package accept a `Text` object and respect its `TextStyle`. 
-
-## Usage
 
 ### Quickstart
 
@@ -46,18 +47,28 @@ TextWrapAutoSize(text);
 TextWrapAutoSizeHyphend(text,'en_us');
 ```
 
-### Use As Method
+Language codes available for hyphenation, based on `tex` codes: 
+
+```dart
+[af, as, bg, bn, ca, cop, cs, cy, da, de_1901, de_1996, de_ch_1901, el_monoton, el_polyton, en_gb, en_us, eo, es, et, eu, fi, fr, fur, ga, gl, grc, gu, hi, hr, hsb, hu, hy, ia, id, is, it, ka, kmr, kn, la_x_classic, la, lt, lv, ml, mn_cyrl_x_lmc, mn_cyrl, mr, mul_ethi, nb, nl, nn, or, pa, pl, pms, pt, rm, ro, ru, sa, sh_cyrl, sk, sl, sv, ta, te, th, tk, tr, uk, zh_latn_pinyin]
+```
+
+## Usage
+
+### Function call
 
 The static method `solution` allows for accessing the computed data progrmmatically. The mmost important one is probably `TextStyle`, its `fontSize` set to the calculated font size. 
 
 construct a font size adjusted widget manually or .
 
 ```dart
-Solution sol = TextWrapAutoSize.solution(Size size, Text text);
+Solution sol = TextWrapAutoSize.solution(
+    Size size, Text text);
 
 // Or with automatic hyphenation:
 
-Solution sol = TextWrapAutoSizeHyphend.solution(Size size, Text text, 'en_us');
+Solution sol = TextWrapAutoSizeHyphend.solution(
+    Size size, Text text, 'en_us');
 
 // String text for easy reference.
 
@@ -78,6 +89,12 @@ print(sol.sizeInner); // Size
 
 print(sol.sizeOuter); // Size
 
+// Whether the calculated font size fits the outer box.
+// This should not happen, except the font size is `1` 
+// and the text still does not fit the outer box.
+
+print(sol.isValid);
+
 // How to output the font adjusted text yourself.
 
 SizedBox(
@@ -87,7 +104,7 @@ SizedBox(
 );
 ```
 
-### Use As Widget
+### Widget
 
 ```dart
 // Define width and height.
@@ -142,9 +159,9 @@ TextWrapAutoSizeHyphend(Text('text'),
 
 ## Alternatives
 
-The package [auto_size_text](https://pub.dev/packages/auto_size_text) does something similar.
+[auto_size_text](https://pub.dev/packages/auto_size_text) does something similar.
 
-The package [magic_text](https://pub.dev/packages/magic_text) does something similar.
+[magic_text](https://pub.dev/packages/magic_text) does something similar.
 
 ## Background 
 
@@ -153,7 +170,7 @@ Internally, the widget performs a binary-search for the optimal font size and re
 ### Todo
 
 * Clipping the text?
-* Setting min and max sizes (depends on clipping)?
+* Setting min and max font sizes?
 
 ## Issues
 
