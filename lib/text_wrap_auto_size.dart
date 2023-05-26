@@ -16,8 +16,9 @@ class TextWrapAutoSize extends StatelessWidget {
   ///
   /// `Solution` has these fields: `String text`, `TextStyle style` and `Size size`.
   /// The field `size` describes the Size of the text, not the bounding, outer box.
-  static Solution solution(Size size, Text text) =>
-      Manager().solution(text, size, null);
+  static Solution solution(Size size, Text text,
+          {EdgeInsets padding = const EdgeInsets.all(0)}) =>
+      Manager().solution(text, size);
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,11 @@ class TextWrapAutoSize extends StatelessWidget {
       if (size.width == double.infinity || size.height == double.infinity) {
         throw 'BoxContraints have infinite height: $size.\n\nTry wrapping TextAutoSize with Expanded: Expanded(child:TextAutoSize("text")).\n\nTry wrapping TextAutoSize with SizedBox: SizedBox(width:250, height:250, child:TextAutoSize("text"))).\n\n';
       }
+
       if (doShowDebug) {
-        return Manager().wrapDebug(text, size, null);
+        return Manager().wrapDebug(text, size);
       } else {
-        return Manager().wrap(text, size, null);
+        return Manager().wrap(text, size);
       }
     });
   }

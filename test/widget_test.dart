@@ -14,8 +14,12 @@ void main() {
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    final Future<ByteData> data = rootBundle.load('test/Roboto-Regular.ttf');
-    final FontLoader fontLoader = FontLoader('Roboto')..addFont(data);
+    Future<ByteData> data = rootBundle.load('test/Roboto-Regular.ttf');
+    FontLoader fontLoader = FontLoader('Roboto')..addFont(data);
+    await fontLoader.load();
+
+    data = rootBundle.load('test/jellee.roman.ttf');
+    fontLoader = FontLoader('Jellee')..addFont(data);
     await fontLoader.load();
 
     sRoboto = const TextStyle(
@@ -84,8 +88,8 @@ plines.""";
     expect(sol.style.fontSize, 211);
     expect(sol.text.style!.fontSize, 211);
     expect(sol.isValid, true);
-    expect(sol.fontSizeTests, 9);
-    expect(sol.sizeInner, const Size(359, 247)); // !?
+    expect(sol.fontSizeTests, 12);
+    expect(sol.sizeInner, const Size(359, 247));
   });
 
   test('function-solution-nohyphen-two-words', () {
@@ -99,8 +103,8 @@ plines.""";
   // -------------------------------------------------------------------
 
   test('manager-wrap-nohyphen-single-word', () {
-    Text sol = Manager()
-        .wrap(Text('test', style: sRoboto), const Size(360, 509), null);
+    Text sol =
+        Manager().wrap(Text('test', style: sRoboto), const Size(360, 509));
     expect(sol.data!, 'test');
     expect(sol.style!.fontSize, 211);
   });
@@ -114,8 +118,7 @@ many creative
 endeavors and
 disciplines.""";
 
-    Text sol =
-        Manager().wrap(Text(text, style: sRoboto), const Size(100, 100), null);
+    Text sol = Manager().wrap(Text(text, style: sRoboto), const Size(100, 100));
     expect(sol.data!, expected);
     expect(sol.style!.fontSize, 12);
   });

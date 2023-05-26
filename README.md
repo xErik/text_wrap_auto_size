@@ -59,8 +59,6 @@ Language codes available for hyphenation, based on `tex` codes:
 
 The static method `solution` allows for accessing the computed data progrmmatically. The mmost important one is probably `TextStyle`, its `fontSize` set to the calculated font size. 
 
-construct a font size adjusted widget manually or .
-
 ```dart
 Solution sol = TextWrapAutoSize.solution(
     Size size, Text text);
@@ -73,6 +71,10 @@ Solution sol = TextWrapAutoSizeHyphend.solution(
 // String text for easy reference.
 
 print(sol.textString); // String 
+
+// Text with TextStyle set.
+
+print(sol.textString); // Text 
 
 // TextStyle with adjusted font size.  
 // All other style properties of the Text-parameter 
@@ -100,7 +102,43 @@ print(sol.isValid);
 SizedBox(
     width: sol.sizeOuter.width,
     height: sol.sizeOuter.height,
-    child: Text(sol.textString, style: sol.style),
+    child: sol.text,
+);
+```
+
+In case the Widgets are placed inside a Container with a hard padding and the Text misbehaves, calculate a soft padding to avoid sudden jumps of the text. These jumps should not happen and are most likely caused by internal rounding. In the future, a padding-parameter will be added which takes care of that.
+
+```dart
+// PROBLEM
+// The hard padding may let the Text misbehave,
+// especially on dynamic resizing.
+
+Container(
+    padding: EdgeInsets.all(16),
+    width: 100,
+    height: 100,
+    child: TextWrapAutoSize(Text('text')),
+)
+
+// SOLUTION
+// Use a soft padding, which is blank space around
+// the centered Text.
+
+Size outerBox = Size(100, 100);
+double textPadding = 16;
+
+final outerBoxAdjusted = Size(
+    outerBox.width - textPadding * 2,
+    outerBox.height - textPadding * 2);
+
+Solution sol = TextWrapAutoSize.solution(
+    outerBoxAdjusted, text);
+
+final text = Container(
+    width: outerBox.width,
+    height: outerBox.height,
+    alignment: Alignment.center,
+    child: sol.text,
 );
 ```
 
@@ -171,6 +209,8 @@ Internally, the widget performs a binary-search for the optimal font size and re
 
 * Clipping the text?
 * Setting min and max font sizes?
+* Add soft-padding support to avoid jumpy text using hard paddings?
+* Remodel interface.
 
 ## Issues
 

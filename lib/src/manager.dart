@@ -22,8 +22,8 @@ class Manager {
   // ------------------------------------------------------------------------------
 
   /// Returns a Stack widget with the adjusted font size some debug output.
-  Stack wrapDebug(Text text, Size size, Hyphenator? h) {
-    final sol = solution(text, size, h);
+  Stack wrapDebug(Text text, Size size, {Hyphenator? hyphenator}) {
+    final sol = solution(text, size, hyphenator: hyphenator);
     final txt = sol.text;
     final label =
         "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
@@ -44,8 +44,8 @@ class Manager {
   }
 
   /// Returns a Text widget with the adjusted font size.
-  Text wrap(Text text, Size size, Hyphenator? h) {
-    final Solution sol = solution(text, size, h);
+  Text wrap(Text text, Size size, {Hyphenator? hyphenator}) {
+    final Solution sol = solution(text, size, hyphenator: hyphenator);
     return sol.text;
   }
 
@@ -55,15 +55,17 @@ class Manager {
 
   /// Returns solution object with the calculated results.
   /// The adjusted font size is stored in `style.fontSize`.
-  Solution solution(Text text, Size sizeOuter, Hyphenator? hyphenator) {
+  Solution solution(Text text, Size sizeOuter, {Hyphenator? hyphenator}) {
     if (text.data!.isEmpty) {
       return Solution(text, const TextStyle(), const Size(0, 0), sizeOuter);
     }
 
     final textScalingOne = TextHelper.cloneWithScalingFactorOne(text);
 
-    final task =
-        Challenge(textScalingOne, sizeOuter, 14, hyphenator: hyphenator);
+    final initialFontSize = sizeOuter.height; // formalize this approach?
+    _candidatesFormer.add(initialFontSize.toInt());
+    final task = Challenge(textScalingOne, sizeOuter, initialFontSize,
+        hyphenator: hyphenator);
 
     strategy =
         hyphenator != null ? StrategyHyphenate() : StrategyNonHyphenate();

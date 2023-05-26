@@ -12,6 +12,8 @@ class Solution {
   final Size sizeInner;
 
   /// The size of the outer box.
+  /// In case padding is set:
+  /// sizeOuter = sizeOuter + padding
   final Size sizeOuter;
 
   /// How many font size tests it took to find this solution.

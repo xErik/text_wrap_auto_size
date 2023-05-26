@@ -8,17 +8,24 @@ import 'src/manager.dart';
 ///
 /// This widget hyphenates the given `Text`.
 ///
+/// [paddingInnerSoft] is optional. It will reduce the `Size`
+/// available for the `Text` and wrap it in a soft padding, centering
+/// its `Text` child. This avoids problems with hard paddings
+/// typically known from a Container upon dynamic resizing.
+///
 /// Throws, if unrestricted (infinite) bounds are given.
 class TextWrapAutoSizeHyphend extends StatefulWidget {
   final Text text;
   final String language;
   final String symbol;
   final String hyphen;
+  final EdgeInsets paddingInnerSoft;
   final bool doShowDebug;
 
   const TextWrapAutoSizeHyphend(this.text, this.language,
       {this.symbol = '\u{00AD}',
       this.hyphen = '-',
+      this.paddingInnerSoft = const EdgeInsets.all(0),
       this.doShowDebug = false,
       super.key});
 
@@ -32,9 +39,10 @@ class TextWrapAutoSizeHyphend extends StatefulWidget {
   /// The field `size` describes the Size of the text, not the bounding, outer box.
   // ignore: unused_element
   static Future<Solution> solution(Size size, Text text, String language,
-      {String symbol = '\u{00AD}'}) async {
+      {String symbol = '\u{00AD}',
+      EdgeInsets padding = const EdgeInsets.all(0)}) async {
     final h = await Hyphenator.loadAsyncByAbbr(language, symbol: symbol);
-    return Manager().solution(text, size, h);
+    return Manager().solution(text, size, hyphenator: h);
   }
 }
 
@@ -65,8 +73,7 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
           throw snap.error!;
         }
 
-        final Hyphenator h = snap.data!;
-        // print('FUTURE');
+        final Hyphenator hyphenator = snap.data!;
 
         // @override
         return LayoutBuilder(builder: (BuildContext ctx, BoxConstraints cts) {
@@ -82,10 +89,10 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
             // print('WRAP FRESH');
             // print('    cacheKey        $cacheKey');
             // print('    cacheKeyCurrent $cacheKeyCurrent');
-            cacheKey = cacheKeyCurrent;
+            // cacheKey = cacheKeyCurrent;
             cache = (widget.doShowDebug)
-                ? Manager().wrapDebug(widget.text, size, h)
-                : Manager().wrap(widget.text, size, h);
+                ? Manager().wrapDebug(widget.text, size, hyphenator: hyphenator)
+                : Manager().wrap(widget.text, size, hyphenator: hyphenator);
           } else {
             // print('WRAP FROM CACHE');
           }

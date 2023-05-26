@@ -96,3 +96,8 @@
 ## 1.1.6+3 
 
 - README.
+
+## 1.1.7
+
+- Reduced testing-roundtrips for large outer boxes.
+- Flooring width and height of outer box.
