@@ -51,6 +51,6 @@ class Solution {
 
   @override
   String toString() {
-    return 'Sol: in:${sizeInner.width}/${sizeInner.height} out:${sizeOuter.width}/${sizeOuter.height} font:${style.fontFamily} size:${style.fontSize} >$textString< isValid/Same:${isValid || isValidSame} ${fontSizeTests == -1 ? '' : "rounds:$fontSizeTests"}';
+    return 'Sol: in:${sizeInner.width}/${sizeInner.height} out:${sizeOuter.width}/${sizeOuter.height} font:${style.fontFamily} style:$style >$textString< isValid/Same:${isValid || isValidSame} ${fontSizeTests == -1 ? '' : "rounds:$fontSizeTests"}';
   }
 }

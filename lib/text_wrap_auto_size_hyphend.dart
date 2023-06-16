@@ -19,13 +19,16 @@ class TextWrapAutoSizeHyphend extends StatefulWidget {
   final String language;
   final String symbol;
   final String hyphen;
-  final EdgeInsets paddingInnerSoft;
+  final double? minFontSize;
+  final double? maxFontSize;
   final bool doShowDebug;
 
+  /// Constructor.
   const TextWrapAutoSizeHyphend(this.text, this.language,
       {this.symbol = '\u{00AD}',
       this.hyphen = '-',
-      this.paddingInnerSoft = const EdgeInsets.all(0),
+      this.minFontSize,
+      this.maxFontSize,
       this.doShowDebug = false,
       super.key});
 
@@ -40,9 +43,14 @@ class TextWrapAutoSizeHyphend extends StatefulWidget {
   // ignore: unused_element
   static Future<Solution> solution(Size size, Text text, String language,
       {String symbol = '\u{00AD}',
-      EdgeInsets padding = const EdgeInsets.all(0)}) async {
-    final h = await Hyphenator.loadAsyncByAbbr(language, symbol: symbol);
-    return Manager().solution(text, size, hyphenator: h);
+      String hyphen = '-',
+      double? minFontSize,
+      double? maxFontSize}) async {
+    final h = await Hyphenator.loadAsyncByAbbr(language,
+        symbol: symbol, hyphen: hyphen);
+
+    return Manager().solution(text, size,
+        hyphenator: h, minFontSize: minFontSize, maxFontSize: maxFontSize);
   }
 }
 
@@ -86,15 +94,15 @@ class _TextWrapAutoSizeHyphendState extends State<TextWrapAutoSizeHyphend> {
               '${widget.text.toString()}|${widget.language}|${widget.symbol}|${widget.hyphen}|${widget.doShowDebug}|$size';
 
           if (cache == null || cacheKey != cacheKeyCurrent) {
-            // print('WRAP FRESH');
-            // print('    cacheKey        $cacheKey');
-            // print('    cacheKeyCurrent $cacheKeyCurrent');
-            // cacheKey = cacheKeyCurrent;
             cache = (widget.doShowDebug)
-                ? Manager().wrapDebug(widget.text, size, hyphenator: hyphenator)
-                : Manager().wrap(widget.text, size, hyphenator: hyphenator);
-          } else {
-            // print('WRAP FROM CACHE');
+                ? Manager().wrapDebug(widget.text, size,
+                    hyphenator: hyphenator,
+                    minFontSize: widget.minFontSize,
+                    maxFontSize: widget.maxFontSize)
+                : Manager().wrap(widget.text, size,
+                    hyphenator: hyphenator,
+                    minFontSize: widget.minFontSize,
+                    maxFontSize: widget.maxFontSize);
           }
 
           return cache!;

@@ -8,17 +8,25 @@ import 'src/manager.dart';
 /// Throws, if unrestricted (infinite) bounds are given.
 class TextWrapAutoSize extends StatelessWidget {
   final Text text;
+  final double? minFontSize;
+  final double? maxFontSize;
   final bool doShowDebug;
 
-  const TextWrapAutoSize(this.text, {super.key, this.doShowDebug = false});
+  /// Constructor.
+  const TextWrapAutoSize(this.text,
+      {super.key,
+      this.minFontSize,
+      this.maxFontSize,
+      this.doShowDebug = false});
 
   /// This method returns the calculated font size with respect to the given size.
   ///
   /// `Solution` has these fields: `String text`, `TextStyle style` and `Size size`.
   /// The field `size` describes the Size of the text, not the bounding, outer box.
   static Solution solution(Size size, Text text,
-          {EdgeInsets padding = const EdgeInsets.all(0)}) =>
-      Manager().solution(text, size);
+          {double? minFontSize, double? maxFontSize}) =>
+      Manager().solution(text, size,
+          minFontSize: minFontSize, maxFontSize: maxFontSize);
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +41,11 @@ class TextWrapAutoSize extends StatelessWidget {
       }
 
       if (doShowDebug) {
-        return Manager().wrapDebug(text, size);
+        return Manager().wrapDebug(text, size,
+            minFontSize: minFontSize, maxFontSize: maxFontSize);
       } else {
-        return Manager().wrap(text, size);
+        return Manager().wrap(text, size,
+            minFontSize: minFontSize, maxFontSize: maxFontSize);
       }
     });
   }

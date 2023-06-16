@@ -96,47 +96,4 @@ void main() {
     expect(sol.fontSizeTests, 11);
     expect(sol.style.fontSize, 306);
   });
-
-  // testWidgets('function-solution-nohyphen-one-word-specialfont2-padding',
-  //     (tester) async {
-  //   TextStyle sJellee = const TextStyle(
-  //     fontFamily: 'Jellee',
-  //     color: Colors.white,
-  //     height: 1.2,
-  //   );
-
-  //   const padding = EdgeInsets.all(102);
-  //   const size = Size(720, 478);
-  //   const str = 'HHH';
-  //   const expected = """HHH""";
-
-  //   final text = Text(str, textAlign: TextAlign.right, style: sJellee);
-
-  //   final app = MaterialApp(
-  //     debugShowMaterialGrid: false,
-  //     home: Scaffold(
-  //         body: RepaintBoundary(
-  //             child: Container(
-  //                 alignment: Alignment.center,
-  //                 color: Colors.black,
-  //                 child: TextWrapAutoSize(
-  //                   text,
-  //                   paddingSoft: padding,
-  //                 )))),
-  //   );
-
-  //   await tester.pumpWidget(app);
-  //   await expectLater(
-  //       find.byType(TextWrapAutoSize),
-  //       matchesGoldenFile(
-  //           'function-solution-nohyphen-one-word-specialfont2-padding.png'));
-
-  //   Solution sol = TextWrapAutoSize.solution(size, text, padding: padding);
-  //   // print(sol);
-  //   expect(sol.textString, expected);
-  //   expect(sol.isValid, true);
-  //   expect(sol.sizeInner, const Size(516, 263));
-  //   expect(sol.fontSizeTests, 11);
-  //   expect(sol.style.fontSize, 219);
-  // });
 }

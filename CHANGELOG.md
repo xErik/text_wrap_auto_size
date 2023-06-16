@@ -101,3 +101,20 @@
 
 - Reduced testing-roundtrips for large outer boxes.
 - Flooring width and height of outer box.
+
+## 1.1.8
+
+- Improved performance for portrait text area.
+
+## 1.1.9
+
+- Calculating initial font size.
+
+## 1.2.0
+
+- Calculating initial font size.
+- Removed parameter `removeFontSize`. 
+
+## 1.2.1
+
+- Added minFontSize and maxFontSize. 

@@ -2,9 +2,10 @@
 
 Wraps text and auto sizes it with respect to the given dimensions, including style, text properties and correct hyphenation.
 
-* Scales font size of automatically.
-* But also accessing the font size calculation programmatically.
+* Scales font size of widget of automatically.
+* Accessing the font size calculation programmatically.
 * Hyphenation for various languages.
+* Setting min font size and max font size.
 * Binary search instead of linear search for best font size.
 
 [Live demo here](https://xerik.github.io/text_wrap_auto_size/).
@@ -40,12 +41,25 @@ final text = Text(
     // ...
 );
 
-TextWrapAutoSize(text);
+TextWrapAutoSize(text, 
+    minFontSize: 50, // optional 
+    maxFontSize: 100, // optional
+);
 
 // Or with automatic hyphenation:
 
-TextWrapAutoSizeHyphend(text,'en_us');
+TextWrapAutoSizeHyphend(text,'en_us', 
+    minFontSize: 50, // optional 
+    maxFontSize: 100, // optional
+);
 ```
+
+**minFontSize and maxFontSize**
+
+`minFontSize` and `maxFontSize` will never cut off (clip) the text. In case `minFontSize` or `maxFontSize` result
+in a font size that does not render all the text, these parameters are ignored.
+
+**Language codes**
 
 Language codes available for hyphenation, based on `tex` codes: 
 
@@ -153,7 +167,7 @@ SizedBox(
     child: TextWrapAutoSize(Text('text'))
 );
 
-// Or with hyphens:
+// With hyphens:
 
 SizedBox(
     width:250,
@@ -208,7 +222,6 @@ Internally, the widget performs a binary-search for the optimal font size and re
 ### Todo
 
 * Clipping the text?
-* Setting min and max font sizes?
 * Add soft-padding support to avoid jumpy text using hard paddings?
 * Remodel interface.
 

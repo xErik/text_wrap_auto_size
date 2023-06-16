@@ -22,8 +22,12 @@ class Manager {
   // ------------------------------------------------------------------------------
 
   /// Returns a Stack widget with the adjusted font size some debug output.
-  Stack wrapDebug(Text text, Size size, {Hyphenator? hyphenator}) {
-    final sol = solution(text, size, hyphenator: hyphenator);
+  Stack wrapDebug(Text text, Size size,
+      {Hyphenator? hyphenator, double? minFontSize, double? maxFontSize}) {
+    final sol = solution(text, size,
+        hyphenator: hyphenator,
+        minFontSize: minFontSize,
+        maxFontSize: maxFontSize);
     final txt = sol.text;
     final label =
         "Inner box: ${sol.sizeInner.width} / ${sol.sizeInner.height}\nOuter box: ${sol.sizeOuter.width} / ${sol.sizeOuter.height}\nFont: ${sol.style.fontSize} / Steps: ${sol.fontSizeTests}";
@@ -44,8 +48,12 @@ class Manager {
   }
 
   /// Returns a Text widget with the adjusted font size.
-  Text wrap(Text text, Size size, {Hyphenator? hyphenator}) {
-    final Solution sol = solution(text, size, hyphenator: hyphenator);
+  Text wrap(Text text, Size size,
+      {Hyphenator? hyphenator, double? minFontSize, double? maxFontSize}) {
+    final Solution sol = solution(text, size,
+        hyphenator: hyphenator,
+        minFontSize: minFontSize,
+        maxFontSize: maxFontSize);
     return sol.text;
   }
 
@@ -55,14 +63,27 @@ class Manager {
 
   /// Returns solution object with the calculated results.
   /// The adjusted font size is stored in `style.fontSize`.
-  Solution solution(Text text, Size sizeOuter, {Hyphenator? hyphenator}) {
+  Solution solution(Text text, Size sizeOuter,
+      {Hyphenator? hyphenator, double? minFontSize, double? maxFontSize}) {
+    if (minFontSize != null &&
+        maxFontSize != null &&
+        minFontSize > maxFontSize) {
+      throw 'minFontSize must be equal to or smaller than maxFontSize';
+    }
+
+    // Reveives smetimes fractions when used inside an adjustable Widget.
+    sizeOuter =
+        Size(sizeOuter.width.floorToDouble(), sizeOuter.height.floorToDouble());
+    // print("  -- sizeOuter: $sizeOuter");
     if (text.data!.isEmpty) {
       return Solution(text, const TextStyle(), const Size(0, 0), sizeOuter);
     }
 
     final textScalingOne = TextHelper.cloneWithScalingFactorOne(text);
 
-    final initialFontSize = sizeOuter.height; // formalize this approach?
+    double initialFontSize = TextHelper.initialFontSize(
+        sizeOuter, text.data!, minFontSize, maxFontSize);
+
     _candidatesFormer.add(initialFontSize.toInt());
     final task = Challenge(textScalingOne, sizeOuter, initialFontSize,
         hyphenator: hyphenator);
@@ -89,7 +110,7 @@ class Manager {
       }
       const TextStyle();
       int? candidate = _candidate(isValid);
-
+      // print(" -- candidate: $candidate");
       if (candidate == null) {
         break;
       } else {
@@ -108,11 +129,35 @@ class Manager {
       throw 'Do not have a smaller Solution than $sol which is too large.';
     }
 
-    solIsValid.fontSizeTests = _candidatesFormer.length + 1;
+    int numberOfTests = _candidatesFormer.length + 1;
+
+    if (minFontSize != null && solIsValid.style.fontSize! < minFontSize) {
+      final taskNew = Challenge(text, sizeOuter, minFontSize,
+          hyphenator: hyphenator, painter: task.painter);
+
+      final sol = strategy.dimensions(taskNew);
+      if (sol.isValid == true) {
+        solIsValid = sol;
+        numberOfTests++;
+      }
+    }
+
+    if (maxFontSize != null && solIsValid.style.fontSize! > maxFontSize) {
+      final taskNew = Challenge(text, sizeOuter, maxFontSize,
+          hyphenator: hyphenator, painter: task.painter);
+
+      final sol = strategy.dimensions(taskNew);
+      if (sol.isValid == true) {
+        solIsValid = sol;
+        numberOfTests++;
+      }
+    }
+
+    solIsValid.fontSizeTests = numberOfTests;
 
     if (kDebugMode) {
       d.log(
-          'font:${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt | inner:${solIsValid.sizeInner.width}/${solIsValid.sizeInner.height} | outer:${solIsValid.sizeOuter.width}/${solIsValid.sizeOuter.height} | steps:${solIsValid.fontSizeTests} | ${strategy.runtimeType.toString()}');
+          'font:${solIsValid.style.fontFamily}/${solIsValid.style.fontSize}pt initialFontSize:$initialFontSize | inner:${solIsValid.sizeInner.width}/${solIsValid.sizeInner.height} | outer:${solIsValid.sizeOuter.width}/${solIsValid.sizeOuter.height} | steps:${solIsValid.fontSizeTests} | ${strategy.runtimeType.toString()}');
     }
 
     return solIsValid;
