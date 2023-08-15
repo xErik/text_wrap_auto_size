@@ -118,3 +118,7 @@
 ## 1.2.1
 
 - Added minFontSize and maxFontSize. 
+
+## 1.2.2
+
+- README. 

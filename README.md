@@ -118,6 +118,19 @@ SizedBox(
     height: sol.sizeOuter.height,
     child: sol.text,
 );
+
+// How to output the font adjusted text yourself.
+// Variant #2
+
+SizedBox(
+    width: c.widthExample,
+    height: c.widthExample,
+    child: Text(
+        sol.text.data!,
+        textScaleFactor: 1.0,
+        style: sol.style
+    ),
+);
 ```
 
 In case the Widgets are placed inside a Container with a hard padding and the Text misbehaves, calculate a soft padding to avoid sudden jumps of the text. These jumps should not happen and are most likely caused by internal rounding. In the future, a padding-parameter will be added which takes care of that.

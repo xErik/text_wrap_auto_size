@@ -71,10 +71,10 @@ packages:
     dependency: "direct main"
     description:
       name: hyphenatorx
-      sha256: "66d9f3ea67c0641762ca14324aed97a02b784207e60a4796f0170416f6a159e8"
+      sha256: dd8d9376d6fb0177f96a1ab3f0d32e7dae7d7e63d764ea554a6f1dcece990840
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.6+2"
+    version: "1.5.9"
   js:
     dependency: transitive
     description:

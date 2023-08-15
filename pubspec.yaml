@@ -3,7 +3,7 @@ description: Wraps text and auto sizes it with respect to the given dimensions, 
 issue_tracker: https://github.com/xErik/text_wrap_auto_size/issues
 repository: https://github.com/xErik/text_wrap_auto_size
 
-version: 1.2.1
+version: 1.2.2
 
 # publish_to: none
 
@@ -17,7 +17,7 @@ dependencies:
   
   # hyphenatorx: 
     # path: ../hyphenatorx
-  hyphenatorx: ^1.5.6+2
+  hyphenatorx: ^1.5.9
 
 dev_dependencies:
   flutter_test:
